@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver State Monitoring System - Interactive Prototype</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-green: #2ECC71;
+            --color-yellow: #F39C12;
+            --color-orange: #E67E22;
+            --color-red: #E74C3C;
+            --color-purple: #9B59B6;
+            --color-dark: #2C1810;
+            --color-light: #F5F0E8;
+            --color-light-secondary: #E8E0D0;
+            --color-text: #2C1810;
+            --color-text-muted: #5A4A3A;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'IBM Plex Sans', sans-serif;
+            background: #FAFAF8;
+            color: var(--color-text);
+            line-height: 1.6;
+            padding: 0;
+        }
+
+        .header {
+            background: var(--color-dark);
+            color: var(--color-light);
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+
+        .header p {
+            font-size: 13px;
+            color: #A89880;
+            margin-bottom: 16px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .nav-tab {
+            padding: 10px 16px;
+            background: transparent;
+            border: 1px solid #4A3A2A;
+            color: var(--color-light);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .nav-tab:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .nav-tab.active {
+            background: var(--color-red);
+            border-color: var(--color-red);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px 20px;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        .hmi-display {
+            background: var(--color-light);
+            border: 2px solid var(--color-text);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            aspect-ratio: 16 / 9;
+            max-width: 640px;
+            margin: 0 auto;
+            transition: all 0.3s ease;
+        }
+
+        .hmi-header {
+            background: var(--color-dark);
+            color: var(--color-light);
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid #4A3A2A;
+        }
+
+        .hmi-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 32px;
+            text-align: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .hmi-main.alert-3,
+        .hmi-main.alert-4 {
+            background: #FFE8E6;
+        }
+
+        .drowsiness-score {
+            font-family: 'Courier New', monospace;
+            font-size: 64px;
+            font-weight: 700;
+            line-height: 1;
+            letter-spacing: -0.02em;
+            transition: color 0.3s ease;
+        }
+
+        .drowsiness-score.normal { color: var(--color-green); }
+        .drowsiness-score.caution { color: var(--color-yellow); }
+        .drowsiness-score.alert { color: var(--color-orange); }
+        .drowsiness-score.critical { color: var(--color-red); }
+
+        .drowsiness-label {
+            font-size: 13px;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-top: -4px;
+        }
+
+        .progress-bar {
+            width: 200px;
+            height: 6px;
+            background: rgba(0,0,0,0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--color-green) 0%, var(--color-yellow) 40%, var(--color-orange) 70%, var(--color-red) 100%);
+            width: 12%;
+            transition: width 0.3s ease;
+        }
+
+        .alert-message {
+            font-size: 18px;
+            font-weight: 500;
+            margin: 8px 0;
+            min-height: 28px;
+            transition: color 0.3s ease;
+        }
+
+        .countdown {
+            font-family: 'Courier New', monospace;
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--color-red);
+            animation: pulse 1s infinite;
+            margin: 8px 0;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .stage-indicator {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin: 8px 0;
+        }
+
+        .stage-dot {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 2px solid var(--color-text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--color-text-muted);
+            transition: all 0.2s ease;
+        }
+
+        .stage-dot.active {
+            border-color: var(--color-red);
+            background: var(--color-red);
+            color: white;
+        }
+
+        .stage-dot.passed {
+            border-color: var(--color-green);
+            background: var(--color-green);
+            color: white;
+        }
+
+        .sensor-status {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            font-size: 12px;
+            margin: 8px 0;
+            flex-wrap: wrap;
+        }
+
+        .sensor-badge {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(0,0,0,0.05);
+            padding: 4px 10px;
+            border-radius: 12px;
+            color: var(--color-text-muted);
+        }
+
+        .sensor-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--color-green);
+            transition: background 0.2s ease;
+        }
+
+        .sensor-dot.error {
+            background: var(--color-red);
+        }
+
+        .hmi-footer {
+            background: var(--color-dark);
+            padding: 12px 16px;
+            display: flex;
+            gap: 8px;
+            border-top: 1px solid #4A3A2A;
+        }
+
+        .hmi-button {
+            flex: 1;
+            padding: 10px 12px;
+            background: transparent;
+            border: 1px solid var(--color-light);
+            color: var(--color-light);
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.2s ease;
+        }
+
+        .hmi-button:hover {
+            background: rgba(245,240,232,0.1);
+        }
+
+        .hmi-button.danger {
+            border-color: var(--color-red);
+            color: var(--color-red);
+        }
+
+        .state-controls {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 24px;
+        }
+
+        .state-btn {
+            padding: 10px 16px;
+            background: white;
+            border: 1px solid #DDD;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .state-btn:hover {
+            background: #F5F5F5;
+        }
+
+        .state-btn.active {
+            background: var(--color-dark);
+            color: white;
+            border-color: var(--color-dark);
+        }
+
+        .beacon-container {
+            background: white;
+            border: 1px solid #DDD;
+            border-radius: 8px;
+            padding: 32px;
+            text-align: center;
+        }
+
+        .vehicle-view {
+            margin: 24px auto;
+            width: 200px;
+            height: 120px;
+            background: #F0F0F0;
+            border-radius: 8px;
+            position: relative;
+            border: 2px solid #999;
+        }
+
+        .beacon {
+            position: absolute;
+            border-radius: 50%;
+            transition: all 0.1s ease;
+        }
+
+        .beacon.roof {
+            width: 80px;
+            height: 20px;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 10px;
+        }
+
+        .beacon.front {
+            width: 30px;
+            height: 30px;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .beacon.side-left {
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: -20px;
+            transform: translateY(-50%);
+        }
+
+        .beacon.side-right {
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            right: -20px;
+            transform: translateY(-50%);
+        }
+
+        .beacon.off {
+            background: #CCC;
+            box-shadow: none;
+        }
+
+        .beacon.amber {
+            background: var(--color-yellow);
+            box-shadow: 0 0 8px var(--color-yellow);
+        }
+
+        .beacon.amber.pulse1 {
+            animation: beacon-pulse1 1s infinite;
+        }
+
+        .beacon.amber.pulse2 {
+            animation: beacon-pulse2 0.5s infinite;
+        }
+
+        .beacon.red {
+            background: var(--color-red);
+            box-shadow: 0 0 12px var(--color-red);
+        }
+
+        .beacon.red.strobe {
+            animation: beacon-strobe 0.25s infinite;
+        }
+
+        @keyframes beacon-pulse1 {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        @keyframes beacon-pulse2 {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.2; }
+        }
+
+        @keyframes beacon-strobe {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.2; }
+        }
+
+        .spec-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .spec-card {
+            background: white;
+            border: 1px solid #DDD;
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .spec-card h3 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--color-dark);
+        }
+
+        .spec-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            padding: 6px 0;
+            border-bottom: 1px solid #F0F0F0;
+        }
+
+        .spec-row:last-child {
+            border-bottom: none;
+        }
+
+        .spec-label {
+            color: var(--color-text-muted);
+            font-weight: 500;
+        }
+
+        .spec-value {
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            color: var(--color-dark);
+        }
+
+        .use-case {
+            background: white;
+            border: 1px solid #DDD;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .use-case h3 {
+            font-size: 18px;
+            margin-bottom: 12px;
+            color: var(--color-dark);
+        }
+
+        .use-case p {
+            color: var(--color-text-muted);
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .timeline-marker {
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--color-dark);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .timeline-content {
+            flex: 1;
+        }
+
+        .timeline-content strong {
+            display: block;
+            font-size: 13px;
+            color: var(--color-dark);
+            margin-bottom: 4px;
+        }
+
+        .timeline-content span {
+            font-size: 12px;
+            color: var(--color-text-muted);
+        }
+
+        .architecture-diagram {
+            background: white;
+            border: 1px solid #DDD;
+            border-radius: 8px;
+            padding: 24px;
+            overflow-x: auto;
+        }
+
+        .diagram-svg {
+            width: 100%;
+            height: auto;
+            min-height: 400px;
+        }
+
+        .disclaimer {
+            background: #FFF9E6;
+            border-left: 4px solid var(--color-yellow);
+            padding: 16px;
+            margin: 24px 0;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #5A4A3A;
+        }
+
+        .metric-box {
+            background: white;
+            border: 1px solid #DDD;
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .metric-number {
+            font-family: 'Courier New', monospace;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--color-red);
+            display: block;
+        }
+
+        .metric-label {
+            font-size: 12px;
+            color: var(--color-text-muted);
+            margin-top: 6px;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 16px;
+            color: var(--color-dark);
+        }
+
+        h3 {
+            font-size: 18px;
+            margin-bottom: 12px;
+            color: var(--color-dark);
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 18px;
+            }
+
+            .nav-tabs {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .nav-tab {
+                width: 100%;
+            }
+
+            .drowsiness-score {
+                font-size: 48px;
+            }
+
+            .hmi-display {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Driver State Monitoring System</h1>
+        <p>Drowsiness Detection Ecosystem - Interactive Prototype</p>
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="switchTab('dashboard')">Dashboard</button>
+            <button class="nav-tab" onclick="switchTab('beacon')">Beacon System</button>
+            <button class="nav-tab" onclick="switchTab('architecture')">Architecture</button>
+            <button class="nav-tab" onclick="switchTab('scenarios')">Use Cases</button>
+            <button class="nav-tab" onclick="switchTab('specs')">Specifications</button>
+            <button class="nav-tab" onclick="switchTab('about')">About</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- DASHBOARD SECTION -->
+        <div id="dashboard" class="section active">
+            <h2>HMI Dashboard - Interactive States</h2>
+            <p style="color: var(--color-text-muted); margin-bottom: 24px;">Click state buttons below to see how the driver interface changes through alert escalation.</p>
+
+            <div class="hmi-display" id="hmiDisplay">
+                <div class="hmi-header">
+                    <span id="headerTime">14:32</span>
+                    <span id="headerSpeed">42 km/h</span>
+                    <span id="headerDistance">12.4 km</span>
+                </div>
+                <div class="hmi-main" id="hmiMain">
+                    <div class="drowsiness-score normal" id="score">12%</div>
+                    <div class="drowsiness-label" id="scoreLabel">Drowsiness</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress" style="width: 12%;"></div>
+                    </div>
+                    <div class="alert-message normal" id="message">All systems normal</div>
+                    <div class="stage-indicator" id="stages"></div>
+                    <div class="sensor-status">
+                        <div class="sensor-badge"><span class="sensor-dot"></span>Eye tracking</div>
+                        <div class="sensor-badge"><span class="sensor-dot"></span>Face detection</div>
+                        <div class="sensor-badge"><span class="sensor-dot"></span>Heart rate</div>
+                    </div>
+                </div>
+                <div class="hmi-footer" id="footer"></div>
+            </div>
+
+            <div class="state-controls">
+                <button class="state-btn active" onclick="setState('normal')">Normal</button>
+                <button class="state-btn" onclick="setState('stage1')">Stage 1</button>
+                <button class="state-btn" onclick="setState('stage2')">Stage 2</button>
+                <button class="state-btn" onclick="setState('stage3')">Stage 3</button>
+                <button class="state-btn" onclick="setState('stage4')">Stop</button>
+                <button class="state-btn" onclick="setState('medical')">Medical</button>
+            </div>
+        </div>
+
+        <!-- BEACON SYSTEM SECTION -->
+        <div id="beacon" class="section">
+            <h2>External Beacon System</h2>
+            <p style="color: var(--color-text-muted); margin-bottom: 24px;">Top-down view of vehicle showing beacon activation patterns across alert stages.</p>
+
+            <div class="beacon-container">
+                <h3 style="margin-bottom: 16px;">Vehicle Status Beacon</h3>
+                <div class="vehicle-view">
+                    <div class="beacon roof" id="beaconRoof"></div>
+                    <div class="beacon front" id="beaconFront"></div>
+                    <div class="beacon side-left" id="beaconSideLeft"></div>
+                    <div class="beacon side-right" id="beaconSideRight"></div>
+                </div>
+
+                <div class="state-controls">
+                    <button class="state-btn active" onclick="setBeacon('off')">Off</button>
+                    <button class="state-btn" onclick="setBeacon('stage1')">Stage 1</button>
+                    <button class="state-btn" onclick="setBeacon('stage2')">Stage 2</button>
+                    <button class="state-btn" onclick="setBeacon('stage3')">Stage 3</button>
+                    <button class="state-btn" onclick="setBeacon('stage4')">Critical</button>
+                </div>
+
+                <div style="margin-top: 24px; text-align: left;">
+                    <h3>Beacon Pattern Specifications</h3>
+                    <div class="spec-grid">
+                        <div class="spec-card">
+                            <h3>Stage 1: Caution</h3>
+                            <div class="spec-row">
+                                <span class="spec-label">Color</span>
+                                <span class="spec-value">Amber</span>
+                            </div>
+                            <div class="spec-row">
+                                <span class="spec-label">Pattern</span>
+                                <span class="spec-value">Slow pulse 1Hz</span>
+                            </div>
+                            <div class="spec-row">
+                                <span class="spec-label">Luminance</span>
+                                <span class="spec-value">250 cd</span>
+                            </div>
+                        </div>
+                        <div class="spec-card">
+                            <h3>Stage 2: Alert</h3>
+                            <div class="spec-row">
+                                <span class="spec-label">Color</span>
+                                <span class="spec-value">Amber</span>
+                            </div>
+                            <div class="spec-row">
+                                <span class="spec-label">Pattern</span>
+                                <span class="spec-value">Fast pulse 2Hz</span>
+                            </div>
+                            <div class="spec-row">
+                                <span class="spec-label">Luminance</span>
+                                <span class="spec-value">400 cd</span>
+                            </div>
+                        </div>
+                        <div class="spec-card">
+                            <h3>Stage 3: Urgent</h3>
+                            <div class="spec-row">
+                                <span class="spec-label">Color</span>
+                                <span class="spec-value">Amber + Hazard</span>
+                            </div>
+                            <div class="spec-row">
+                                <span class="spec-label">Pattern</span>
+                                <span class="spec-value">Rapid 4Hz</span>
+                            </div>
+                            <div class="spec-row">
+                                <span class="spec-label">Luminance</span>
+                                <span class="spec-value">600 cd</span>
+                            </div>
+                        </div>
+                        <div class="spec-card">
+                            <h3>Stage 4: Stop</h3>
+                            <div class="spec-row">
+                                <span class="spec-label">Color</span>
+                                <span class="spec-value">Red strobe</span>
+                            </div>
+                            <div class="spec-row">
+                                <span class="spec-label">Pattern</span>
+                                <span class="spec-value">Strobe 4Hz</span>
+                            </div>
+                            <div class="spec-row">
+                                <span class="spec-label">Luminance</span>
+                                <span class="spec-value">1000 cd</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ARCHITECTURE SECTION -->
+        <div id="architecture" class="section">
+            <h2>System Architecture</h2>
+            <p style="color: var(--color-text-muted); margin-bottom: 24px;">Unified detection engine feeding three output subsystems.</p>
+
+            <div class="architecture-diagram">
+                <svg class="diagram-svg" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Sensor Inputs -->
+                    <rect x="50" y="20" width="100" height="60" fill="#E6F1FB" stroke="#185FA5" stroke-width="2" rx="4"/>
+                    <text x="100" y="50" text-anchor="middle" font-size="13" font-weight="600" fill="#042C53">Eye Tracking</text>
+
+                    <rect x="200" y="20" width="100" height="60" fill="#E6F1FB" stroke="#185FA5" stroke-width="2" rx="4"/>
+                    <text x="250" y="50" text-anchor="middle" font-size="13" font-weight="600" fill="#042C53">Facial Recognition</text>
+
+                    <rect x="350" y="20" width="100" height="60" fill="#E6F1FB" stroke="#185FA5" stroke-width="2" rx="4"/>
+                    <text x="400" y="50" text-anchor="middle" font-size="13" font-weight="600" fill="#042C53">Heart Rate</text>
+
+                    <!-- Arrows to Engine -->
+                    <line x1="100" y1="80" x2="150" y2="130" stroke="#185FA5" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    <line x1="250" y1="80" x2="250" y2="130" stroke="#185FA5" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    <line x1="400" y1="80" x2="350" y2="130" stroke="#185FA5" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+                    <!-- Decision Engine -->
+                    <rect x="150" y="130" width="200" height="80" fill="#FFF9E6" stroke="#BA7517" stroke-width="2" rx="4"/>
+                    <text x="250" y="160" text-anchor="middle" font-size="14" font-weight="600" fill="#853F0B">Drowsiness Detection</text>
+                    <text x="250" y="180" text-anchor="middle" font-size="12" fill="#853F0B">Confidence Score (0-100%)</text>
+                    <text x="250" y="195" text-anchor="middle" font-size="12" fill="#853F0B">Medical Context Flag</text>
+
+                    <!-- Arrows to Subsystems -->
+                    <line x1="170" y1="210" x2="120" y2="260" stroke="#BA7517" stroke-width="2" marker-end="url(#arrowhead2)"/>
+                    <line x1="250" y1="210" x2="250" y2="260" stroke="#BA7517" stroke-width="2" marker-end="url(#arrowhead2)"/>
+                    <line x1="330" y1="210" x2="380" y2="260" stroke="#BA7517" stroke-width="2" marker-end="url(#arrowhead2)"/>
+
+                    <!-- Output Subsystems -->
+                    <rect x="20" y="260" width="120" height="80" fill="#FBEAF0" stroke="#993556" stroke-width="2" rx="4"/>
+                    <text x="80" y="290" text-anchor="middle" font-size="13" font-weight="600" fill="#4B1528">Driver Alerts</text>
+                    <text x="80" y="310" text-anchor="middle" font-size="11" fill="#72243E">Haptic</text>
+                    <text x="80" y="325" text-anchor="middle" font-size="11" fill="#72243E">Voice</text>
+                    <text x="80" y="340" text-anchor="middle" font-size="11" fill="#72243E">Stop</text>
+
+                    <rect x="200" y="260" width="120" height="80" fill="#FAECE7" stroke="#993C1D" stroke-width="2" rx="4"/>
+                    <text x="260" y="290" text-anchor="middle" font-size="13" font-weight="600" fill="#4A1B0C">Public Warning</text>
+                    <text x="260" y="310" text-anchor="middle" font-size="11" fill="#712B13">Beacon</text>
+                    <text x="260" y="325" text-anchor="middle" font-size="11" fill="#712B13">V2V</text>
+                    <text x="260" y="340" text-anchor="middle" font-size="11" fill="#712B13">Comms</text>
+
+                    <rect x="380" y="260" width="120" height="80" fill="#E1F5EE" stroke="#0F6E56" stroke-width="2" rx="4"/>
+                    <text x="440" y="290" text-anchor="middle" font-size="13" font-weight="600" fill="#04342C">HMI Display</text>
+                    <text x="440" y="310" text-anchor="middle" font-size="11" fill="#085041">Drowsiness %</text>
+                    <text x="440" y="325" text-anchor="middle" font-size="11" fill="#085041">Alert Stage</text>
+                    <text x="440" y="340" text-anchor="middle" font-size="11" fill="#085041">Instructions</text>
+
+                    <!-- Failsafe -->
+                    <rect x="600" y="230" width="140" height="110" fill="#FCEBEB" stroke="#A32D2D" stroke-width="2" stroke-dasharray="5,5" rx="4"/>
+                    <text x="670" y="260" text-anchor="middle" font-size="12" font-weight="600" fill="#501313">FAILSAFE</text>
+                    <text x="670" y="280" text-anchor="middle" font-size="11" fill="#791F1F">If sensors fail:</text>
+                    <text x="670" y="295" text-anchor="middle" font-size="11" fill="#791F1F">Default to stop</text>
+                    <text x="670" y="310" text-anchor="middle" font-size="11" fill="#791F1F">Beacon alert</text>
+
+                    <!-- Arrow markers -->
+                    <defs>
+                        <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+                            <polygon points="0,0 10,5 0,10" fill="#185FA5"/>
+                        </marker>
+                        <marker id="arrowhead2" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+                            <polygon points="0,0 10,5 0,10" fill="#BA7517"/>
+                        </marker>
+                    </defs>
+                </svg>
+            </div>
+        </div>
+
+        <!-- USE CASES SECTION -->
+        <div id="scenarios" class="section">
+            <h2>Use Case Scenarios</h2>
+
+            <div class="use-case">
+                <h3>Scenario 1: Regular Drowsy Driver</h3>
+                <p>Driver begins to show signs of drowsiness but responds to initial alerts and recovers safely.</p>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-marker" style="background: var(--color-green);">T0</div>
+                        <div class="timeline-content">
+                            <strong>12% Drowsiness - Normal Driving</strong>
+                            <span>Vehicle operating normally, all systems green</span>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker" style="background: var(--color-yellow);">T5</div>
+                        <div class="timeline-content">
+                            <strong>45% Drowsiness - Stage 1 Alert</strong>
+                            <span>Subtle seat vibration detected, driver receives gentle warning</span>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker" style="background: var(--color-green);">T10</div>
+                        <div class="timeline-content">
+                            <strong>18% Drowsiness - Driver Responds</strong>
+                            <span>Driver opens eyes, increases alertness, score drops back to normal</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="disclaimer" style="margin-top: 16px;">Result: Safe recovery. Vehicle continues normally. No autonomous stop required.</div>
+            </div>
+
+            <div class="use-case">
+                <h3>Scenario 2: Driver Ignores All Alerts</h3>
+                <p>Drowsiness escalates through all stages because driver doesn't respond to warnings.</p>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-marker" style="background: var(--color-yellow);">T0</div>
+                        <div class="timeline-content">
+                            <strong>45% - Stage 1 (Vibration)</strong>
+                            <span>Gentle seat vibration. Driver ignores.</span>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker" style="background: var(--color-orange);">T3</div>
+                        <div class="timeline-content">
+                            <strong>62% - Stage 2 (Sound + Haptic)</strong>
+                            <span>Dog bark or voice alert + stronger vibration. Driver ignores.</span>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker" style="background: var(--color-red);">T8</div>
+                        <div class="timeline-content">
+                            <strong>78% - Stage 3 (Critical)</strong>
+                            <span>Red dashboard, urgent voice "VEHICLE STOPPING IN 5 SECONDS". External beacon flashing red.</span>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker" style="background: #A00; color: white;">T15</div>
+                        <div class="timeline-content">
+                            <strong>92% - Autonomous Stop Engaged</strong>
+                            <span>Vehicle brakes automatically. Hazard lights on. Beacon strobing. Public warned.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="disclaimer" style="background: #FCEBEB; border-left-color: var(--color-red); margin-top: 16px;">Result: Emergency intervention. Vehicle stopped. Driver must manually resume. System protects all road users.</div>
+            </div>
+
+            <div class="use-case">
+                <h3>Scenario 3: Post-Seizure Medical Episode</h3>
+                <p>System detects drowsiness from medical recovery (seizure aftermath) and adapts response with dignity.</p>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-marker" style="background: var(--color-purple);">T0</div>
+                        <div class="timeline-content">
+                            <strong>Medical Flag: Seizure Recovery Detected</strong>
+                            <span>System recognizes unusual eye movement pattern consistent with post-seizure state</span>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker" style="background: var(--color-orange);">T3</div>
+                        <div class="timeline-content">
+                            <strong>55% Drowsiness - Gentle Alert Path</strong>
+                            <span>System skips aggressive stages. Message: "Your seizure recovery was detected. We're protecting you."</span>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker" style="background: var(--color-purple);">T5</div>
+                        <div class="timeline-content">
+                            <strong>Vehicle Stops Safely</strong>
+                            <span>Gentle deceleration to shoulder. Screen offers: Medical resources, Emergency contact, Doctor notification</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="disclaimer" style="background: #EEE9FE; border-left-color: var(--color-purple); margin-top: 16px;">Result: Medical-aware intervention. Driver supported, not punished. Public safety maintained with dignity.</div>
+            </div>
+
+            <div class="use-case">
+                <h3>Scenario 4: Pedestrian Perspective</h3>
+                <p>Pedestrian approaching intersection receives safety information through external beacon.</p>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-marker" style="background: var(--color-green);">T0</div>
+                        <div class="timeline-content">
+                            <strong>Vehicle Approaching (Normal)</strong>
+                            <span>No beacon active. Pedestrian assumes driver is alert. Prepares to cross.</span>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker" style="background: var(--color-yellow);">T3</div>
+                        <div class="timeline-content">
+                            <strong>Beacon Pulses Amber (Stage 1)</strong>
+                            <span>Pedestrian notices subtle pulsing. Intuitive reaction: "Something's off. I'll wait."</span>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker" style="background: var(--color-orange);">T8</div>
+                        <div class="timeline-content">
+                            <strong>Beacon Flashing Faster (Stage 2)</strong>
+                            <span>Pedestrian now certain: "Driver is compromised. Definitely not crossing."</span>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker" style="background: var(--color-red);">T15</div>
+                        <div class="timeline-content">
+                            <strong>Vehicle Stops, Beacon Red Strobe</strong>
+                            <span>Pedestrian safely crosses. Crisis averted. System protected everyone.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="disclaimer" style="background: #E1F5EE; border-left-color: var(--color-green); margin-top: 16px;">Result: Public safety through transparency. Pedestrian made informed decision. Collision prevented.</div>
+            </div>
+        </div>
+
+        <!-- SPECIFICATIONS SECTION -->
+        <div id="specs" class="section">
+            <h2>System Specifications</h2>
+
+            <h3 style="margin-top: 32px;">Alert Escalation Timing</h3>
+            <div class="spec-grid">
+                <div class="spec-card">
+                    <h3>Stage 1: Caution</h3>
+                    <div class="spec-row">
+                        <span class="spec-label">Drowsiness Range</span>
+                        <span class="spec-value">40-55%</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Alert Type</span>
+                        <span class="spec-value">Vibration only</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Duration</span>
+                        <span class="spec-value">3 seconds</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Next If Ignored</span>
+                        <span class="spec-value">→ Stage 2</span>
+                    </div>
+                </div>
+
+                <div class="spec-card">
+                    <h3>Stage 2: Alert</h3>
+                    <div class="spec-row">
+                        <span class="spec-label">Drowsiness Range</span>
+                        <span class="spec-value">56-70%</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Alert Type</span>
+                        <span class="spec-value">Haptic + Audio</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Duration</span>
+                        <span class="spec-value">5 seconds</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Next If Ignored</span>
+                        <span class="spec-value">→ Stage 3</span>
+                    </div>
+                </div>
+
+                <div class="spec-card">
+                    <h3>Stage 3: Urgent</h3>
+                    <div class="spec-row">
+                        <span class="spec-label">Drowsiness Range</span>
+                        <span class="spec-value">71-85%</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Alert Type</span>
+                        <span class="spec-value">Critical display</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Duration</span>
+                        <span class="spec-value">7 seconds</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Next If Ignored</span>
+                        <span class="spec-value">→ Stage 4</span>
+                    </div>
+                </div>
+
+                <div class="spec-card">
+                    <h3>Stage 4: Critical Stop</h3>
+                    <div class="spec-row">
+                        <span class="spec-label">Drowsiness Range</span>
+                        <span class="spec-value">86-100%</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Alert Type</span>
+                        <span class="spec-value">Autonomous brake</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Duration</span>
+                        <span class="spec-value">Persistent</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Recovery</span>
+                        <span class="spec-value">Manual only</span>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 32px;">Color Specifications</h3>
+            <div class="grid-2">
+                <div class="metric-box">
+                    <span class="metric-number" style="color: var(--color-green);">●</span>
+                    <span class="metric-label">Normal: #2ECC71</span>
+                </div>
+                <div class="metric-box">
+                    <span class="metric-number" style="color: var(--color-yellow);">●</span>
+                    <span class="metric-label">Caution: #F39C12</span>
+                </div>
+                <div class="metric-box">
+                    <span class="metric-number" style="color: var(--color-orange);">●</span>
+                    <span class="metric-label">Alert: #E67E22</span>
+                </div>
+                <div class="metric-box">
+                    <span class="metric-number" style="color: var(--color-red);">●</span>
+                    <span class="metric-label">Critical: #E74C3C</span>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 32px;">Accessibility Requirements</h3>
+            <div class="spec-grid">
+                <div class="spec-card">
+                    <h3>Contrast Ratios</h3>
+                    <div class="spec-row">
+                        <span class="spec-label">Body text</span>
+                        <span class="spec-value">7:1 minimum</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Alert text</span>
+                        <span class="spec-value">10:1 minimum</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">WCAG Standard</span>
+                        <span class="spec-value">AA+</span>
+                    </div>
+                </div>
+
+                <div class="spec-card">
+                    <h3>Text Sizing</h3>
+                    <div class="spec-row">
+                        <span class="spec-label">Alert messages</span>
+                        <span class="spec-value">24px minimum</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Body text</span>
+                        <span class="spec-value">16px minimum</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Never below</span>
+                        <span class="spec-value">11px</span>
+                    </div>
+                </div>
+
+                <div class="spec-card">
+                    <h3>Touch Targets</h3>
+                    <div class="spec-row">
+                        <span class="spec-label">Minimum size</span>
+                        <span class="spec-value">48px</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Gap between</span>
+                        <span class="spec-value">8px minimum</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Glove-friendly</span>
+                        <span class="spec-value">Yes</span>
+                    </div>
+                </div>
+
+                <div class="spec-card">
+                    <h3>Redundancy</h3>
+                    <div class="spec-row">
+                        <span class="spec-label">Never color alone</span>
+                        <span class="spec-value">Icon + text</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Audio backup</span>
+                        <span class="spec-value">For all alerts</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Haptic backup</span>
+                        <span class="spec-value">For all alerts</span>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 32px;">Safety Impact</h3>
+            <div class="grid-2">
+                <div class="metric-box">
+                    <span class="metric-number">6,400</span>
+                    <span class="metric-label">Current annual drowsy-driving deaths (US)</span>
+                </div>
+                <div class="metric-box">
+                    <span class="metric-number">70%</span>
+                    <span class="metric-label">Target reduction with this system</span>
+                </div>
+                <div class="metric-box">
+                    <span class="metric-number">~4,500</span>
+                    <span class="metric-label">Lives potentially saved annually (US)</span>
+                </div>
+                <div class="metric-box">
+                    <span class="metric-number">1.4B</span>
+                    <span class="metric-label">Windows users affected daily</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ABOUT SECTION -->
+        <div id="about" class="section">
+            <h2>About This System</h2>
+
+            <h3>Design Philosophy</h3>
+            <p>This system is built on three core principles:</p>
+            <ul style="margin: 16px 0 24px 24px; color: var(--color-text-muted); line-height: 1.8;">
+                <li><strong>Safety Override Hierarchy:</strong> Some warnings can be dismissed (speed limit). Drowsiness alerts cannot. External beacon cannot be disabled.</li>
+                <li><strong>Medical Dignity:</strong> System respects medical conditions (seizure recovery, hypoglycemia, cardiac arrhythmia) while maintaining public safety.</li>
+                <li><strong>Transparent Public Safety:</strong> Pedestrians and other drivers deserve to know vehicle status. External beacon provides this information.</li>
+            </ul>
+
+            <h3>Not Traditional ADAS</h3>
+            <p style="color: var(--color-text-muted);">This is a <strong>Driver State Monitoring System</strong>, not traditional Advanced Driver Assistance (ADAS). It monitors the human, not the vehicle. When driving becomes unsafe due to driver state, it intervenes autonomously.</p>
+
+            <h3>Design Scope vs. Engineering Scope</h3>
+            <div class="disclaimer" style="background: white; border: 1px solid #DDD; border-left: 4px solid var(--color-dark);">
+                <strong>Design scope (what's in this prototype):</strong>
+                <ul style="margin: 8px 0 0 24px; font-size: 14px;">
+                    <li>UX/interaction design for driver alerts</li>
+                    <li>Human-centered problem framing</li>
+                    <li>Escalation logic and feedback systems</li>
+                    <li>Safety principles and ethics</li>
+                </ul>
+                <br>
+                <strong>Engineering scope (requires partners):</strong>
+                <ul style="margin: 0 0 0 24px; font-size: 14px;">
+                    <li>Sensor specifications (eye-tracking accuracy, latency)</li>
+                    <li>Medical validation (drowsiness thresholds, edge cases)</li>
+                    <li>Hardware engineering (beacon placement, circuits)</li>
+                    <li>Regulatory compliance (NHTSA, EU standards)</li>
+                    <li>Production feasibility (cost, miniaturization, power)</li>
+                </ul>
+            </div>
+
+            <h3 style="margin-top: 32px;">How to Use This Prototype</h3>
+            <ol style="margin: 16px 0 24px 24px; color: var(--color-text-muted); line-height: 1.8;">
+                <li><strong>Dashboard Tab:</strong> Click state buttons to see how alerts escalate from normal to critical stop.</li>
+                <li><strong>Beacon System:</strong> See how external warning patterns progress. Test different activation stages.</li>
+                <li><strong>Architecture Diagram:</strong> Understand how sensors feed into unified decision engine and three output subsystems.</li>
+                <li><strong>Use Cases:</strong> Read real scenarios showing how system would work for different drivers and pedestrians.</li>
+                <li><strong>Specifications:</strong> Review timing, colors, accessibility requirements, and impact metrics.</li>
+            </ol>
+
+            <h3>Next Steps</h3>
+            <ul style="margin: 16px 0 24px 24px; color: var(--color-text-muted); line-height: 1.8;">
+                <li>Export this prototype and share with Bosch, Aptiv, or automotive manufacturers</li>
+                <li>Iterate based on engineering feedback</li>
+                <li>Build high-fidelity Figma design system for production handoff</li>
+                <li>Conduct user testing with drivers and pedestrians</li>
+                <li>Partner with medical experts for edge case validation</li>
+            </ul>
+
+            <h3>Credits & Background</h3>
+            <p style="color: var(--color-text-muted);">
+                This system combines 20 years of SCADA (Supervisory Control and Data Acquisition) expertise with human-centered UX design. SCADA systems deal with real-time critical data, safety-first thinking, and failsafe design — the same principles apply to automotive safety systems.
+            </p>
+
+            <h3 style="margin-top: 32px;">Contact & Feedback</h3>
+            <p style="color: var(--color-text-muted);">
+                This is a design exploration meant to advance the conversation around driver state monitoring. Feedback from engineers, manufacturers, medical experts, and safety researchers is welcome and essential.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        const states = {
+            normal: {
+                score: 12, label: 'Drowsiness', message: 'All systems normal',
+                scoreClass: 'normal', headerSpeed: '42 km/h', stage: 0, countdown: null,
+                footer: ['Pull Over', 'Help']
+            },
+            stage1: {
+                score: 48, label: 'Caution', message: 'Eyes closing detected. Stay alert.',
+                scoreClass: 'caution', headerSpeed: '40 km/h', stage: 1, countdown: null,
+                footer: ['Pull Over', 'I\'m Alert']
+            },
+            stage2: {
+                score: 63, label: 'Alert', message: 'Vehicle will stop in 10 seconds if drowsiness continues.',
+                scoreClass: 'alert', headerSpeed: '38 km/h', stage: 2, countdown: null,
+                footer: ['Confirm Awake', 'Pull Over']
+            },
+            stage3: {
+                score: 78, label: 'Critical', message: 'Emergency stop in 5 seconds.',
+                scoreClass: 'critical', headerSpeed: '35 km/h', stage: 3, countdown: '5',
+                footer: ['I\'m Awake!', 'Override']
+            },
+            stage4: {
+                score: 92, label: 'Stopped', message: 'EMERGENCY STOP ENGAGED. Vehicle is stationary.',
+                scoreClass: 'critical', headerSpeed: '0 km/h', stage: 4, countdown: null,
+                footer: ['Resume', 'Call Help']
+            },
+            medical: {
+                score: 55, label: 'Medical', message: 'Seizure recovery detected. Pulling to safety.',
+                scoreClass: 'alert', headerSpeed: '15 km/h', stage: 1, countdown: null,
+                footer: ['I\'m OK', 'Medical Help']
+            }
+        };
+
+        function setState(key) {
+            const state = states[key];
+            const score = document.getElementById('score');
+            const scoreLabel = document.getElementById('scoreLabel');
+            const message = document.getElementById('message');
+            const progress = document.getElementById('progress');
+            const hmiMain = document.getElementById('hmiMain');
+            const footer = document.getElementById('footer');
+            const headerSpeed = document.getElementById('headerSpeed');
+
+            score.textContent = state.score + '%';
+            score.className = 'drowsiness-score ' + state.scoreClass;
+            scoreLabel.textContent = state.label;
+            message.textContent = state.message;
+            message.className = 'alert-message ' + state.scoreClass;
+            progress.style.width = state.score + '%';
+            headerSpeed.textContent = state.headerSpeed;
+
+            hmiMain.className = 'hmi-main alert-' + (state.stage || 0);
+
+            let footerHTML = '';
+            state.footer.forEach((label, i) => {
+                const isFirst = i === 0;
+                const isDanger = state.stage === 4 && isFirst;
+                footerHTML += `<button class="hmi-button${isDanger ? ' danger' : ''}">${label}</button>`;
+            });
+            footer.innerHTML = footerHTML;
+
+            let stagesHTML = '';
+            for (let i = 0; i < 4; i++) {
+                let dotClass = 'stage-dot';
+                if (i < state.stage) dotClass += ' passed';
+                else if (i === state.stage && state.stage > 0) dotClass += ' active';
+                stagesHTML += `<div class="${dotClass}">${i + 1}</div>`;
+            }
+            document.getElementById('stages').innerHTML = stagesHTML;
+
+            if (state.countdown) {
+                message.innerHTML = `Emergency stop in <span class="countdown">${state.countdown}</span> seconds.`;
+            }
+
+            document.querySelectorAll('.state-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        const beaconStates = {
+            off: { roof: 'off', front: 'off', left: 'off', right: 'off' },
+            stage1: { roof: 'amber pulse1', front: 'amber pulse1', left: 'amber pulse1', right: 'amber pulse1' },
+            stage2: { roof: 'amber pulse2', front: 'amber pulse2', left: 'amber pulse2', right: 'amber pulse2' },
+            stage3: { roof: 'amber pulse2', front: 'red', left: 'amber pulse2', right: 'amber pulse2' },
+            stage4: { roof: 'red strobe', front: 'red strobe', left: 'red strobe', right: 'red strobe' }
+        };
+
+        function setBeacon(key) {
+            const state = beaconStates[key];
+            document.getElementById('beaconRoof').className = 'beacon roof ' + state.roof;
+            document.getElementById('beaconFront').className = 'beacon front ' + state.front;
+            document.getElementById('beaconSideLeft').className = 'beacon side-left ' + state.left;
+            document.getElementById('beaconSideRight').className = 'beacon side-right ' + state.right;
+
+            document.querySelectorAll('.state-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+
+            window.scrollTo(0, 0);
+        }
+
+        setInterval(() => {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            document.getElementById('headerTime').textContent = hours + ':' + minutes;
+        }, 1000);
+    </script>
+</body>
+</html>
