@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SR Views — Srinivas CV | Human Factors Design</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-page:    #DDD9D0;
+  --bg-sheet:   #F6F3ED;
+  --bg-card:    #FFFFFF;
+  --bg-hd:      #111110;
+  --tx-primary: #111110;
+  --tx-mid:     #3d3c3a;
+  --tx-muted:   #7a7870;
+  --tx-hint:    #aaa8a0;
+  --teal:       #0F6E56;
+  --teal2:      #1D9E75;
+  --teal3:      #9FE1CB;
+  --teal-bg:    rgba(29,158,117,.06);
+  --teal-bd:    rgba(29,158,117,.18);
+  --rule:       #D4D1C8;
+  --accent:     #E83B1F;
+}
+
+[data-theme="dark"] {
+  --bg-page:    #0d0d0c;
+  --bg-sheet:   #161614;
+  --bg-card:    #1a1a18;
+  --bg-hd:      #0a0a09;
+  --tx-primary: #F0EDE6;
+  --tx-mid:     #C5C2BA;
+  --tx-muted:   #7a7870;
+  --tx-hint:    #4a4845;
+  --teal:       #1D9E75;
+  --teal2:      #9FE1CB;
+  --teal3:      #9FE1CB;
+  --teal-bg:    rgba(29,158,117,.1);
+  --teal-bd:    rgba(159,225,203,.2);
+  --rule:       #2a2a28;
+  --accent:     #E83B1F;
+}
+
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+
+body {
+  background: var(--bg-page);
+  color: var(--tx-primary);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+  min-height: 100vh;
+  transition: background .35s, color .35s;
+}
+
+/* NOISE */
+body::after {
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;
+  z-index:999;
+  opacity:.5;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top:0; left:0; right:0;
+  z-index:100;
+  padding: 18px 48px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background: var(--bg-page);
+  border-bottom: 1px solid var(--rule);
+  transition: background .35s;
+}
+
+.nav-brand {
+  font-family:'DM Mono', monospace;
+  font-size:13px;
+  font-weight:500;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color: var(--teal);
+  text-decoration:none;
+}
+
+.nav-right {
+  display:flex;
+  align-items:center;
+  gap:24px;
+}
+
+.nav-link {
+  font-size:13px;
+  color: var(--tx-muted);
+  text-decoration:none;
+  letter-spacing:.04em;
+  transition:color .2s;
+}
+.nav-link:hover { color: var(--tx-primary); }
+
+.theme-btn {
+  width:36px; height:20px;
+  border-radius:10px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+  cursor:pointer;
+  position:relative;
+  transition:background .3s;
+  flex-shrink:0;
+}
+.theme-btn::after {
+  content:'';
+  position:absolute;
+  width:14px; height:14px;
+  border-radius:50%;
+  background: var(--teal);
+  top:2px; left:2px;
+  transition:transform .3s, background .3s;
+}
+[data-theme="dark"] .theme-btn::after { transform:translateX(16px); }
+
+/* HERO */
+.hero {
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  padding-top:57px;
+}
+
+.hero-left {
+  background: var(--bg-hd);
+  padding: 80px 64px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  position:relative;
+  overflow:hidden;
+}
+
+.hero-left::before {
+  content:'SR';
+  position:absolute;
+  bottom:-40px; left:-20px;
+  font-family:'DM Serif Display', serif;
+  font-size:300px;
+  color:rgba(255,255,255,.03);
+  line-height:1;
+  pointer-events:none;
+  user-select:none;
+}
+
+.hero-tag {
+  font-family:'DM Mono', monospace;
+  font-size:11px;
+  letter-spacing:.25em;
+  text-transform:uppercase;
+  color: var(--teal3);
+  margin-bottom:24px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.hero-tag::before {
+  content:'';
+  width:28px; height:1px;
+  background: var(--teal3);
+}
+
+.hero-name {
+  font-family:'DM Serif Display', serif;
+  font-size:clamp(52px,6vw,88px);
+  line-height:.95;
+  color:#FFFFFF;
+  margin-bottom:8px;
+}
+
+.hero-name span {
+  color: var(--teal3);
+  display:block;
+  font-style:italic;
+}
+
+.hero-role {
+  font-size:17px;
+  color:rgba(255,255,255,.5);
+  margin-bottom:48px;
+  font-weight:300;
+  line-height:1.6;
+  max-width:400px;
+}
+
+.hero-manifesto {
+  font-family:'DM Serif Display', serif;
+  font-style:italic;
+  font-size:20px;
+  color:rgba(255,255,255,.7);
+  border-left:3px solid var(--teal2);
+  padding-left:20px;
+  line-height:1.5;
+  max-width:420px;
+  margin-bottom:48px;
+}
+
+.hero-contact {
+  display:flex;
+  gap:24px;
+  flex-wrap:wrap;
+}
+
+.contact-item {
+  font-family:'DM Mono', monospace;
+  font-size:12px;
+  color:rgba(255,255,255,.4);
+  letter-spacing:.08em;
+}
+
+.contact-item a {
+  color:rgba(255,255,255,.4);
+  text-decoration:none;
+  transition:color .2s;
+}
+.contact-item a:hover { color: var(--teal3); }
+
+.hero-right {
+  background: var(--bg-sheet);
+  padding: 80px 48px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:32px;
+  transition: background .35s;
+}
+
+.hero-right-label {
+  font-family:'DM Mono', monospace;
+  font-size:11px;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color: var(--tx-muted);
+  margin-bottom:-16px;
+}
+
+/* STATS ROW */
+.stats-row {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1px;
+  background: var(--rule);
+  border:1px solid var(--rule);
+}
+
+.stat-box {
+  background: var(--bg-card);
+  padding:24px 20px;
+  text-align:center;
+  transition: background .35s;
+}
+
+.stat-n {
+  font-family:'DM Serif Display', serif;
+  font-size:40px;
+  color: var(--teal);
+  line-height:1;
+  display:block;
+}
+
+.stat-l {
+  font-size:12px;
+  color: var(--tx-muted);
+  margin-top:4px;
+  font-family:'DM Mono', monospace;
+  letter-spacing:.06em;
+}
+
+/* QUICK FACTS */
+.facts-list {
+  display:flex;
+  flex-direction:column;
+  gap:0;
+}
+
+.fact-item {
+  display:flex;
+  align-items:baseline;
+  gap:12px;
+  padding:12px 0;
+  border-bottom:1px solid var(--rule);
+  font-size:14px;
+}
+
+.fact-dot {
+  width:6px; height:6px;
+  border-radius:50%;
+  background: var(--teal2);
+  flex-shrink:0;
+  margin-top:6px;
+}
+
+.fact-text { color: var(--tx-mid); }
+.fact-text strong { color: var(--tx-primary); font-weight:500; }
+
+/* SECTION */
+section {
+  padding:100px 0;
+}
+
+.container {
+  max-width:1280px;
+  margin:0 auto;
+  padding:0 48px;
+}
+
+.sec-label {
+  font-family:'DM Mono', monospace;
+  font-size:11px;
+  letter-spacing:.25em;
+  text-transform:uppercase;
+  color: var(--teal);
+  margin-bottom:12px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.sec-label::after {
+  content:'';
+  width:40px; height:1px;
+  background: var(--teal);
+}
+
+.sec-heading {
+  font-family:'DM Serif Display', serif;
+  font-size:clamp(40px,5vw,72px);
+  line-height:.95;
+  margin-bottom:16px;
+  color: var(--tx-primary);
+}
+
+.sec-sub {
+  font-size:17px;
+  color: var(--tx-muted);
+  max-width:560px;
+  line-height:1.7;
+  margin-bottom:64px;
+}
+
+/* WORK GRID — main projects */
+.work-grid {
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:2px;
+  background: var(--rule);
+}
+
+.work-card {
+  background: var(--bg-card);
+  padding:48px 40px;
+  text-decoration:none;
+  color: inherit;
+  display:block;
+  position:relative;
+  overflow:hidden;
+  transition:background .25s;
+  cursor:pointer;
+}
+
+.work-card:hover { background: var(--teal-bg); }
+
+.work-card::before {
+  content:attr(data-num);
+  position:absolute;
+  top:-16px; right:24px;
+  font-family:'DM Serif Display', serif;
+  font-size:96px;
+  color:rgba(15,110,86,.06);
+  line-height:1;
+  pointer-events:none;
+}
+
+.work-cat {
+  font-family:'DM Mono', monospace;
+  font-size:10px;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color: var(--teal);
+  margin-bottom:16px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.work-cat-dot {
+  width:6px; height:6px;
+  border-radius:50%;
+  background: var(--teal2);
+  flex-shrink:0;
+}
+
+.work-title {
+  font-family:'DM Serif Display', serif;
+  font-size:28px;
+  line-height:1.2;
+  color: var(--tx-primary);
+  margin-bottom:8px;
+}
+
+.work-sub {
+  font-size:14px;
+  color: var(--tx-muted);
+  line-height:1.6;
+  margin-bottom:24px;
+}
+
+.work-tags {
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-bottom:24px;
+}
+
+.work-tag {
+  font-family:'DM Mono', monospace;
+  font-size:10px;
+  letter-spacing:.08em;
+  padding:4px 10px;
+  border:1px solid var(--teal-bd);
+  color: var(--teal);
+  background: var(--teal-bg);
+  border-radius:100px;
+}
+
+.work-arrow {
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-size:13px;
+  color: var(--teal);
+  font-weight:500;
+  transition:gap .2s;
+}
+.work-card:hover .work-arrow { gap:14px; }
+
+/* BELIEFS SECTION */
+.beliefs-section { background: var(--bg-hd); }
+.beliefs-section .sec-heading { color:#FFFFFF; }
+.beliefs-section .sec-label { color: var(--teal3); }
+.beliefs-section .sec-label::after { background: var(--teal3); }
+.beliefs-section .sec-sub { color:rgba(255,255,255,.45); }
+
+.beliefs-grid {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:2px;
+  background:rgba(255,255,255,.08);
+}
+
+.belief-card {
+  background: var(--bg-hd);
+  padding:36px 32px;
+  border-top:3px solid;
+}
+
+.belief-card:nth-child(1) { border-color: var(--teal2); }
+.belief-card:nth-child(2) { border-color: var(--accent); }
+.belief-card:nth-child(3) { border-color: #C9A84C; }
+
+.belief-num {
+  font-family:'DM Serif Display', serif;
+  font-size:48px;
+  color:rgba(255,255,255,.06);
+  line-height:1;
+  margin-bottom:16px;
+}
+
+.belief-title {
+  font-family:'DM Serif Display', serif;
+  font-size:20px;
+  color:#FFFFFF;
+  margin-bottom:10px;
+}
+
+.belief-text {
+  font-size:14px;
+  color:rgba(255,255,255,.45);
+  line-height:1.7;
+}
+
+/* POSTER SECTION */
+.poster-section { background: var(--bg-sheet); }
+
+.poster-card {
+  background: var(--bg-card);
+  border:1px solid var(--rule);
+  padding:48px 40px;
+  display:flex;
+  gap:48px;
+  align-items:flex-start;
+  text-decoration:none;
+  color:inherit;
+  transition:background .25s;
+}
+.poster-card:hover { background: var(--teal-bg); }
+
+.poster-quote {
+  font-family:'DM Serif Display', serif;
+  font-style:italic;
+  font-size:clamp(24px,3vw,40px);
+  line-height:1.3;
+  color: var(--tx-primary);
+  flex:1;
+}
+
+.poster-quote em { color: var(--teal); font-style:normal; }
+
+.poster-meta {
+  flex-shrink:0;
+  width:240px;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+  padding-top:8px;
+}
+
+.poster-label {
+  font-family:'DM Mono', monospace;
+  font-size:10px;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color: var(--tx-muted);
+  margin-bottom:4px;
+}
+
+.poster-value {
+  font-size:14px;
+  color: var(--tx-mid);
+}
+
+.poster-btn {
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-size:13px;
+  color: var(--teal);
+  font-weight:500;
+  margin-top:8px;
+}
+
+/* FOOTER */
+footer {
+  background: var(--bg-hd);
+  padding:64px 0 40px;
+}
+
+.footer-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:48px;
+  padding-bottom:48px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  margin-bottom:32px;
+}
+
+.footer-brand-name {
+  font-family:'DM Serif Display', serif;
+  font-size:40px;
+  color:#FFFFFF;
+  line-height:1;
+  margin-bottom:12px;
+}
+
+.footer-tagline {
+  font-family:'DM Serif Display', serif;
+  font-style:italic;
+  font-size:16px;
+  color:rgba(255,255,255,.4);
+  line-height:1.5;
+}
+
+.footer-col-label {
+  font-family:'DM Mono', monospace;
+  font-size:10px;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.3);
+  margin-bottom:16px;
+}
+
+.footer-links {
+  list-style:none;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.footer-links a {
+  font-size:14px;
+  color:rgba(255,255,255,.5);
+  text-decoration:none;
+  transition:color .2s;
+}
+.footer-links a:hover { color: var(--teal3); }
+
+.footer-bottom {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.footer-copy {
+  font-family:'DM Mono', monospace;
+  font-size:11px;
+  color:rgba(255,255,255,.25);
+  letter-spacing:.06em;
+}
+
+/* ANIMATIONS */
+.fade-up {
+  opacity:0;
+  transform:translateY(20px);
+  transition:opacity .7s ease, transform .7s ease;
+}
+.fade-up.visible {
+  opacity:1;
+  transform:translateY(0);
+}
+
+.fade-up:nth-child(2) { transition-delay:.1s; }
+.fade-up:nth-child(3) { transition-delay:.2s; }
+.fade-up:nth-child(4) { transition-delay:.3s; }
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .hero { grid-template-columns:1fr; }
+  .hero-left { padding:80px 32px 48px; min-height:60vh; }
+  .hero-right { padding:48px 32px; }
+  .work-grid { grid-template-columns:1fr; }
+  .beliefs-grid { grid-template-columns:1fr; }
+  .footer-grid { grid-template-columns:1fr; gap:32px; }
+  .poster-card { flex-direction:column; }
+  .poster-meta { width:100%; }
+  nav { padding:16px 24px; }
+  .container { padding:0 24px; }
+  .stats-row { grid-template-columns:1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-brand">SR Views</a>
+  <div class="nav-right">
+    <a href="Srinivas_CV_Full_Interactive.html" class="nav-link">Resume</a>
+    <a href="mailto:sr.viewsun@gmail.com" class="nav-link">Contact</a>
+    <button class="theme-btn" onclick="toggleTheme()" aria-label="Toggle theme"></button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-left">
+    <div class="hero-tag">Human Factors · Safety Design · SR Views</div>
+    <h1 class="hero-name">Srinivas<span>CV</span></h1>
+    <p class="hero-role">20 years designing interfaces where a wrong decision shuts down a power plant. Now applying the same lens to the products that billions use every day.</p>
+    <blockquote class="hero-manifesto">"Nobody was measuring what their product does to the human body and mind after sustained real-world use. I started measuring it."</blockquote>
+    <div class="hero-contact">
+      <span class="contact-item"><a href="mailto:sr.viewsun@gmail.com">sr.viewsun@gmail.com</a></span>
+      <span class="contact-item">Bengaluru, India</span>
+      <span class="contact-item">April 2026</span>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-right-label">At a glance</div>
+
+    <div class="stats-row">
+      <div class="stat-box">
+        <span class="stat-n">20</span>
+        <div class="stat-l">years HMI</div>
+      </div>
+      <div class="stat-box">
+        <span class="stat-n">4</span>
+        <div class="stat-l">live concepts</div>
+      </div>
+      <div class="stat-box">
+        <span class="stat-n">200M</span>
+        <div class="stat-l">riders affected</div>
+      </div>
+    </div>
+
+    <div class="facts-list">
+      <div class="fact-item">
+        <div class="fact-dot"></div>
+        <div class="fact-text"><strong>SCADA · Control Rooms · Touch Panels</strong> — safety-critical HMI where failure costs lives</div>
+      </div>
+      <div class="fact-item">
+        <div class="fact-dot"></div>
+        <div class="fact-text"><strong>Human Factors Researcher</strong> — finding the design failures that ship unnoticed</div>
+      </div>
+      <div class="fact-item">
+        <div class="fact-dot"></div>
+        <div class="fact-text"><strong>Cogni-Hood (CH-01)</strong> — named a 40-year-old two-wheeler safety problem. No prior art found.</div>
+      </div>
+      <div class="fact-item">
+        <div class="fact-dot"></div>
+        <div class="fact-text"><strong>ConvoStack</strong> — spotted a UX gap inside an AI tool while using it to solve a different problem</div>
+      </div>
+      <div class="fact-item">
+        <div class="fact-dot"></div>
+        <div class="fact-text"><strong>Rider since 1990s</strong> — the lens that started everything</div>
+      </div>
+    </div>
+
+    <a href="Srinivas_CV_Full_Interactive.html" style="display:inline-flex;align-items:center;gap:10px;font-size:14px;color:var(--teal);font-weight:500;text-decoration:none;margin-top:8px;">
+      View full interactive resume →
+    </a>
+  </div>
+</div>
+
+<!-- WORK -->
+<section style="background:var(--bg-sheet); transition:background .35s;">
+  <div class="container">
+    <div class="sec-label">Work</div>
+    <h2 class="sec-heading">The concepts.<br>The case studies.</h2>
+    <p class="sec-sub">Four ideas. All original. All buildable today. Each one found the same way — by looking at what products do to people after they leave the building.</p>
+
+    <div class="work-grid">
+
+      <!-- COGNI-HOOD -->
+      <a href="Cogni_Hood_Double_Diamond.html" class="work-card fade-up" data-num="01" target="_blank">
+        <div class="work-cat"><div class="work-cat-dot"></div>Product Design · Safety · Two-Wheeler</div>
+        <div class="work-title">Cogni-Hood (CH-01)<br>Desert Visibility Console</div>
+        <div class="work-sub">A cobra-shaped display housing that eliminates 40 years of dashboard head-tilt for 200 million Indian riders. No new technology. A geometry change. Feasibility score: 8.5/10.</div>
+        <div class="work-tags">
+          <span class="work-tag">Human Factors</span>
+          <span class="work-tag">Industrial Design</span>
+          <span class="work-tag">Rider Safety</span>
+          <span class="work-tag">No Prior Art</span>
+          <span class="work-tag">Double Diamond</span>
+        </div>
+        <div class="work-arrow">Open case study →</div>
+      </a>
+
+      <!-- CONVOSTACK -->
+      <a href="ConvoStack_CaseStudy.html" class="work-card fade-up" data-num="02" target="_blank">
+        <div class="work-cat"><div class="work-cat-dot"></div>AI Product Design · UX Research</div>
+        <div class="work-title">ConvoStack<br>Structured Intelligence Layer</div>
+        <div class="work-sub">AI gives you the answer. We help you find it again. A real-time auto-classification layer for AI conversations — born inside the same conversation that needed it. Zero competitors today.</div>
+        <div class="work-tags">
+          <span class="work-tag">AI UX</span>
+          <span class="work-tag">Product Concept</span>
+          <span class="work-tag">B2B SaaS</span>
+          <span class="work-tag">Double Diamond</span>
+          <span class="work-tag">Original</span>
+        </div>
+        <div class="work-arrow">Open case study →</div>
+      </a>
+
+      <!-- DSM -->
+      <a href="DSM_Interactive_Prototype.html" class="work-card fade-up" data-num="03" target="_blank">
+        <div class="work-cat"><div class="work-cat-dot"></div>ADAS · Automotive Safety · HMI</div>
+        <div class="work-title">Driver State Monitoring<br>Interactive Prototype</div>
+        <div class="work-sub">A live interactive prototype for driver state monitoring systems — fatigue detection, attention tracking, alert hierarchy. Applying ISA-18.2 industrial alarm principles to automotive ADAS design.</div>
+        <div class="work-tags">
+          <span class="work-tag">ADAS</span>
+          <span class="work-tag">HMI Design</span>
+          <span class="work-tag">Alarm Hierarchy</span>
+          <span class="work-tag">Prototype</span>
+        </div>
+        <div class="work-arrow">Open prototype →</div>
+      </a>
+
+      <!-- RESUME -->
+      <a href="Srinivas_CV_Full_Interactive.html" class="work-card fade-up" data-num="04" target="_blank">
+        <div class="work-cat"><div class="work-cat-dot"></div>Interactive Resume · Identity</div>
+        <div class="work-title">Srinivas CV<br>Full Interactive Resume</div>
+        <div class="work-sub">Not a PDF. A living document. 20 years of safety-critical HMI design, certifications, skills, and philosophy — in a dark-mode interactive page that shows rather than tells.</div>
+        <div class="work-tags">
+          <span class="work-tag">Interactive</span>
+          <span class="work-tag">Dark Mode</span>
+          <span class="work-tag">Human Factors</span>
+          <span class="work-tag">SCADA</span>
+        </div>
+        <div class="work-arrow">Open resume →</div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- BELIEFS -->
+<section class="beliefs-section">
+  <div class="container">
+    <div class="sec-label">What I believe</div>
+    <h2 class="sec-heading" style="color:#fff;">The lens that<br>finds everything.</h2>
+    <p class="sec-sub">Every concept on this page came from the same question — asked in a different place.</p>
+
+    <div class="beliefs-grid">
+      <div class="belief-card fade-up">
+        <div class="belief-num">01</div>
+        <div class="belief-title">Design ships before it is finished</div>
+        <div class="belief-text">The most dangerous design failures are not the ones caught in testing. They are the ones that make it all the way through engineering, approval, and into the hands of real people — where they quietly cause damage nobody is measuring.</div>
+      </div>
+      <div class="belief-card fade-up">
+        <div class="belief-num">02</div>
+        <div class="belief-title">The body is always the brief</div>
+        <div class="belief-text">A rider tilts their head. A plant operator stays alert at 3am. An office worker stares into a white screen for 8 hours. The human body is the real specification. Everything else is a design decision made by someone who forgot that.</div>
+      </div>
+      <div class="belief-card fade-up">
+        <div class="belief-num">03</div>
+        <div class="belief-title">White space has nothing to do with white</div>
+        <div class="belief-text">Breathing room between elements. The pause between thoughts. It can be black, textured, deep navy — any colour at all. If it carries no information, it is white space. The industry has been saying this wrong for 40 years.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- POSTER / UX RESPONSIBILITY -->
+<section class="poster-section">
+  <div class="container">
+    <div class="sec-label">Manifesto</div>
+    <h2 class="sec-heading">The price<br>of caring.</h2>
+    <p class="sec-sub">UX design is not an exam. Not a pleasure. Not just a job.</p>
+
+    <a href="UX_Responsibility_Poster_.html" class="poster-card" target="_blank">
+      <div class="poster-quote">
+        "UX Design is <em>Responsibility</em>.<br>
+        Result must work in all time zones · all climates · all seasons · all humans · all aspects · all dimensions."
+      </div>
+      <div class="poster-meta">
+        <div>
+          <div class="poster-label">Type</div>
+          <div class="poster-value">Design Manifesto Poster</div>
+        </div>
+        <div>
+          <div class="poster-label">Origin</div>
+          <div class="poster-value">20 years of sitting on the edge of a chair until it was right</div>
+        </div>
+        <div>
+          <div class="poster-label">Year</div>
+          <div class="poster-value">2026</div>
+        </div>
+        <div class="poster-btn">Open poster →</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-name">SR Views</div>
+        <div class="footer-tagline">From Industrial Complexity<br>to Intuitive Simplicity.</div>
+      </div>
+      <div>
+        <div class="footer-col-label">Pages</div>
+        <ul class="footer-links">
+          <li><a href="Srinivas_CV_Full_Interactive.html" target="_blank">Interactive Resume</a></li>
+          <li><a href="Cogni_Hood_Double_Diamond.html" target="_blank">Cogni-Hood Case Study</a></li>
+          <li><a href="ConvoStack_CaseStudy.html" target="_blank">ConvoStack Case Study</a></li>
+          <li><a href="DSM_Interactive_Prototype.html" target="_blank">DSM Prototype</a></li>
+          <li><a href="UX_Responsibility_Poster_.html" target="_blank">UX Responsibility Poster</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-label">Contact</div>
+        <ul class="footer-links">
+          <li><a href="mailto:sr.viewsun@gmail.com">sr.viewsun@gmail.com</a></li>
+          <li><a href="https://linkedin.com/company/srviews" target="_blank">LinkedIn — SR Views</a></li>
+          <li><a href="#" style="color:rgba(255,255,255,.25);pointer-events:none;">Bengaluru, India</a></li>
+        </ul>
+        <div style="margin-top:24px; font-size:13px; color:rgba(255,255,255,.3); line-height:1.6;">
+          Open to full-time roles in automotive HMI, EV design, and safety-critical product design.
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2026 SR Views — Srinivas CV — Bengaluru</span>
+      <span class="footer-copy">Human Factors · Safety Design · Original Work</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+function toggleTheme(){
+  var h=document.documentElement;
+  h.setAttribute('data-theme', h.getAttribute('data-theme')==='dark'?'light':'dark');
+}
+
+var obs=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){ if(e.isIntersecting) e.target.classList.add('visible'); });
+},{threshold:0.15});
+
+document.querySelectorAll('.fade-up').forEach(function(el){ obs.observe(el); });
+</script>
+</body>
+</html>

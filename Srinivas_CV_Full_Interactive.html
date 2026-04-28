@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Srinivas CV — UX Designer & Human Factors Specialist</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   DESIGN TOKENS — light & dark
+═══════════════════════════════════════════ */
+:root {
+  --bg-page:    #DDD9D0;
+  --bg-sheet:   #F6F3ED;
+  --bg-sidebar: #ECEAE3;
+  --bg-hd:      #111110;
+  --bg-card:    #FFFFFF;
+  --bg-detail:  #FFFFFF;
+  --bg-bring:   rgba(29,158,117,.05);
+
+  --tx-primary: #111110;
+  --tx-mid:     #3d3c3a;
+  --tx-muted:   #7a7870;
+  --tx-hint:    #aaa8a0;
+
+  --teal:       #0F6E56;
+  --teal2:      #1D9E75;
+  --teal3:      #9FE1CB;
+  --teal-bg:    rgba(29,158,117,.08);
+  --teal-bd:    rgba(29,158,117,.2);
+
+  --rule:       #D4D1C8;
+  --rule2:      #E8E5DF;
+
+  --hd-name:    #FFFFFF;
+  --hd-role:    #9FE1CB;
+  --hd-contact: rgba(255,255,255,.42);
+  --hd-sep:     rgba(255,255,255,.14);
+
+  --pill-tx:    var(--teal);
+  --pill-bg:    rgba(29,158,117,.08);
+  --pill-bd:    rgba(29,158,117,.2);
+
+  --bring-bd:   var(--teal2);
+  --insight-tx: var(--teal);
+
+  --switch-bg:  #E8E5DF;
+  --switch-bd:  #D4D1C8;
+  --switch-knob:#FFFFFF;
+  --switch-shadow: rgba(0,0,0,.12);
+}
+
+[data-theme="dark"] {
+  --bg-page:    #0d0d0c;
+  --bg-sheet:   #161614;
+  --bg-sidebar: #111110;
+  --bg-hd:      #0a0a09;
+  --bg-card:    #1a1a18;
+  --bg-detail:  #1a1a18;
+  --bg-bring:   rgba(29,158,117,.07);
+
+  --tx-primary: #F0EDE6;
+  --tx-mid:     #C5C2BA;
+  --tx-muted:   #7a7870;
+  --tx-hint:    #4a4845;
+
+  --teal:       #1D9E75;
+  --teal2:      #9FE1CB;
+  --teal3:      #9FE1CB;
+  --teal-bg:    rgba(29,158,117,.1);
+  --teal-bd:    rgba(159,225,203,.2);
+
+  --rule:       #2a2a28;
+  --rule2:      #222220;
+
+  --hd-name:    #F0EDE6;
+  --hd-role:    #5DCAA5;
+  --hd-contact: rgba(240,237,230,.35);
+  --hd-sep:     rgba(240,237,230,.12);
+
+  --pill-tx:    #9FE1CB;
+  --pill-bg:    rgba(29,158,117,.12);
+  --pill-bd:    rgba(159,225,203,.18);
+
+  --bring-bd:   #1D9E75;
+  --insight-tx: #9FE1CB;
+
+  --switch-bg:  #1a2820;
+  --switch-bd:  #1D9E75;
+  --switch-knob:#0d1410;
+  --switch-shadow: rgba(29,158,117,.3);
+}
+
+/* ═══════════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════════ */
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+
+html { transition: background .35s; }
+
+body {
+  background: var(--bg-page);
+  font-family: 'DM Sans', system-ui, sans-serif;
+  color: var(--tx-mid);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 28px 16px 64px;
+  transition: background .35s, color .35s;
+}
+
+/* ═══════════════════════════════════════════
+   MOON TOGGLE
+═══════════════════════════════════════════ */
+.toggle-wrap {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.toggle-label {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--tx-muted);
+  transition: color .3s;
+}
+.toggle-switch {
+  width: 52px;
+  height: 28px;
+  border-radius: 14px;
+  background: var(--switch-bg);
+  border: 1.5px solid var(--switch-bd);
+  position: relative;
+  cursor: pointer;
+  transition: background .35s, border-color .35s;
+  box-shadow: 0 2px 8px var(--switch-shadow);
+}
+.toggle-switch:hover { box-shadow: 0 3px 14px var(--switch-shadow); }
+
+.toggle-knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--switch-knob);
+  transition: transform .35s cubic-bezier(.4,0,.2,1), background .35s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  line-height: 1;
+  box-shadow: 0 1px 4px rgba(0,0,0,.18);
+}
+[data-theme="dark"] .toggle-knob {
+  transform: translateX(24px);
+}
+
+/* ═══════════════════════════════════════════
+   SHEET
+═══════════════════════════════════════════ */
+.sheet {
+  width: 980px;
+  max-width: 100%;
+  background: var(--bg-sheet);
+  box-shadow: 0 16px 64px rgba(0,0,0,.2), 0 2px 8px rgba(0,0,0,.08);
+  overflow: hidden;
+  transition: background .35s, box-shadow .35s;
+}
+
+/* ═══════════════════════════════════════════
+   HEADER
+═══════════════════════════════════════════ */
+.hd {
+  background: var(--bg-hd);
+  padding: 38px 48px 28px;
+  position: relative;
+  overflow: hidden;
+  transition: background .35s;
+}
+.hd::before {
+  content:'';
+  position:absolute;
+  top:-80px; right:-80px;
+  width:260px; height:260px;
+  border-radius:50%;
+  border:1px solid rgba(29,158,117,.07);
+}
+.hd::after {
+  content:'';
+  position:absolute;
+  bottom:0; left:0; right:0;
+  height:2px;
+  background:linear-gradient(90deg, var(--teal2) 0%, transparent 65%);
+  transition: background .35s;
+}
+.hd-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 52px;
+  color: var(--hd-name);
+  line-height: 1;
+  letter-spacing: -.5px;
+  margin-bottom: 8px;
+  transition: color .35s;
+}
+.hd-role {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--hd-role);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+  transition: color .35s;
+}
+.hd-row {
+  display: flex;
+  gap: 22px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.hd-row a, .hd-row span {
+  font-size: 11px;
+  color: var(--hd-contact);
+  text-decoration: none;
+  letter-spacing: .3px;
+  transition: color .2s;
+}
+.hd-row a:hover { color: var(--hd-role); }
+.hd-sep {
+  width:1px; height:10px;
+  background: var(--hd-sep);
+  transition: background .35s;
+}
+
+/* ═══════════════════════════════════════════
+   BODY TWO-PANE
+═══════════════════════════════════════════ */
+.body {
+  display: grid;
+  grid-template-columns: 210px 1fr;
+}
+
+/* ═══════════════════════════════════════════
+   SIDEBAR
+═══════════════════════════════════════════ */
+.sidebar {
+  background: var(--bg-sidebar);
+  padding: 28px 22px 48px;
+  border-right: 1px solid var(--rule);
+  transition: background .35s, border-color .35s;
+}
+.s-sec { margin-bottom: 26px; }
+.s-lbl {
+  font-size: 8.5px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--teal);
+  padding-bottom: 6px;
+  border-bottom: 1.5px solid var(--teal2);
+  margin-bottom: 10px;
+  display: block;
+  transition: color .35s, border-color .35s;
+}
+.s-i {
+  font-size: 11.5px;
+  color: var(--tx-mid);
+  line-height: 1.5;
+  padding: 3px 0;
+  display: flex;
+  gap: 5px;
+  align-items: flex-start;
+  transition: color .35s;
+}
+.s-i::before {
+  content:'–';
+  color: var(--teal2);
+  font-size: 10px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  transition: color .35s;
+}
+.s-i small {
+  display: block;
+  font-size: 10px;
+  color: var(--tx-muted);
+  font-style: italic;
+  transition: color .35s;
+}
+.s-tag {
+  display: inline-block;
+  font-size: 9.5px;
+  color: var(--pill-tx);
+  background: var(--pill-bg);
+  border: 1px solid var(--pill-bd);
+  border-radius: 3px;
+  padding: 2px 7px;
+  margin: 2px 2px 0 0;
+  transition: color .35s, background .35s, border-color .35s;
+}
+.edu-t {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--tx-primary);
+  margin-bottom: 2px;
+  transition: color .35s;
+}
+.edu-s {
+  font-size: 10.5px;
+  color: var(--tx-muted);
+  font-style: italic;
+  transition: color .35s;
+}
+
+/* ═══════════════════════════════════════════
+   MAIN
+═══════════════════════════════════════════ */
+.main {
+  padding: 28px 36px 44px;
+  transition: background .35s;
+}
+.m-sec {
+  font-size: 8.5px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--teal);
+  padding-bottom: 6px;
+  border-bottom: 2px solid var(--teal2);
+  margin-bottom: 14px;
+  margin-top: 26px;
+  display: block;
+  transition: color .35s, border-color .35s;
+}
+.main .m-sec:first-child { margin-top: 0; }
+
+.profile {
+  font-size: 12.5px;
+  line-height: 1.85;
+  color: var(--tx-mid);
+  transition: color .35s;
+}
+
+/* roles */
+.role { margin-top: 18px; }
+.role-hd {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 5px;
+}
+.role-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 15px;
+  color: var(--tx-primary);
+  transition: color .35s;
+}
+.role-org {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: var(--tx-muted);
+  font-weight: 400;
+  transition: color .35s;
+}
+.role-period {
+  font-size: 10.5px;
+  color: var(--tx-muted);
+  font-style: italic;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: color .35s;
+}
+.buls { padding:0; list-style:none; }
+.buls li {
+  font-size: 11.5px;
+  color: var(--tx-mid);
+  line-height: 1.65;
+  padding: 2px 0 2px 14px;
+  position: relative;
+  transition: color .35s;
+}
+.buls li::before {
+  content: '–';
+  position: absolute;
+  left: 0;
+  color: var(--teal2);
+  transition: color .35s;
+}
+
+/* ═══════════════════════════════════════════
+   PORTFOLIO MATRIX
+═══════════════════════════════════════════ */
+.pf-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 26px;
+  margin-bottom: 13px;
+}
+.pf-row .m-sec { margin: 0; }
+.pf-hint {
+  font-size: 10px;
+  color: var(--tx-muted);
+  font-style: italic;
+  transition: color .35s;
+}
+.matrix-wrap {
+  position: relative;
+  width: 100%;
+}
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+/* CARDS */
+.card {
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 16px 18px 14px;
+  cursor: pointer;
+  background: var(--bg-card);
+  position: relative;
+  overflow: hidden;
+  transition: transform .22s ease, box-shadow .22s ease,
+              border-color .22s ease, opacity .28s ease,
+              background .35s;
+}
+.card::before {
+  content:'';
+  position:absolute;
+  top:0; left:0; right:0;
+  height:2px;
+  background: var(--teal2);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .25s ease, background .35s;
+}
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(29,158,117,.14);
+  border-color: var(--teal2);
+}
+.card:hover::before { transform: scaleX(1); }
+.card.dissolve { opacity:0; transform:scale(.96); pointer-events:none; }
+
+.c-tag {
+  font-size: 8.5px;
+  font-weight: 600;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: var(--teal2);
+  margin-bottom: 5px;
+  transition: color .35s;
+}
+.c-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 16px;
+  color: var(--tx-primary);
+  margin-bottom: 5px;
+  line-height: 1.2;
+  transition: color .35s;
+}
+.c-desc {
+  font-size: 11px;
+  color: var(--tx-muted);
+  line-height: 1.6;
+  transition: color .35s;
+}
+.c-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 10px;
+  font-size: 9.5px;
+  font-weight: 500;
+  color: var(--teal);
+  letter-spacing: .4px;
+  transition: gap .18s, color .35s;
+}
+.card:hover .c-cta { gap: 7px; }
+.c-cta svg {
+  width:10px; height:10px;
+  stroke:currentColor; fill:none;
+  stroke-width:1.8;
+  stroke-linecap:round; stroke-linejoin:round;
+}
+
+/* ═══════════════════════════════════════════
+   DETAIL VIEW
+═══════════════════════════════════════════ */
+.detail {
+  position: absolute;
+  top:0; left:0;
+  width:100%; height:100%;
+  background: var(--bg-detail);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .32s ease, background .35s, border-color .35s;
+  display: flex;
+  flex-direction: column;
+}
+.detail.open { opacity:1; pointer-events:all; }
+
+.d-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--rule);
+  flex-shrink: 0;
+  background: inherit;
+  transition: border-color .35s;
+}
+.d-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--teal);
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+  letter-spacing: .3px;
+  padding: 3px 6px 3px 0;
+  transition: gap .18s, color .35s;
+}
+.d-back:hover { gap:8px; }
+.d-back svg {
+  width:13px; height:13px;
+  stroke:currentColor; fill:none;
+  stroke-width:1.8;
+  stroke-linecap:round; stroke-linejoin:round;
+}
+
+/* detail mode toggle */
+.d-modes {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  overflow: hidden;
+  transition: border-color .35s;
+}
+.d-mode-btn {
+  padding: 3px 11px;
+  font-size: 9.5px;
+  font-weight: 500;
+  font-family: inherit;
+  border: none;
+  cursor: pointer;
+  letter-spacing: .5px;
+  background: transparent;
+  color: var(--tx-muted);
+  transition: background .2s, color .2s;
+}
+.d-mode-btn.on { background: var(--teal2); color: #fff; }
+.d-mode-btn:hover:not(.on) { background: var(--bg-sidebar); }
+
+.d-visual {
+  flex-shrink: 0;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  transition: background .35s;
+}
+.d-visual svg { width:100%; height:100%; display:block; }
+
+.d-body {
+  flex: 1;
+  padding: 16px 20px 18px;
+  overflow-y: auto;
+}
+.d-ptag {
+  font-size: 8.5px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--teal2);
+  margin-bottom: 5px;
+  transition: color .35s;
+}
+.d-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 20px;
+  color: var(--tx-primary);
+  line-height: 1.2;
+  margin-bottom: 9px;
+  transition: color .35s;
+}
+.d-desc {
+  font-size: 11.5px;
+  line-height: 1.82;
+  color: var(--tx-mid);
+  margin-bottom: 11px;
+  transition: color .35s;
+}
+.d-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 11px;
+}
+.d-pill {
+  font-size: 9.5px;
+  color: var(--pill-tx);
+  background: var(--pill-bg);
+  border: 1px solid var(--pill-bd);
+  border-radius: 20px;
+  padding: 3px 10px;
+  font-weight: 500;
+  transition: color .35s, background .35s, border-color .35s;
+}
+.d-insight {
+  font-size: 11px;
+  color: var(--insight-tx);
+  font-style: italic;
+  border-top: 1px solid var(--rule);
+  padding-top: 10px;
+  line-height: 1.75;
+  transition: color .35s, border-color .35s;
+}
+
+/* ═══════════════════════════════════════════
+   WHAT I BRING + FOOTER
+═══════════════════════════════════════════ */
+.bring {
+  font-size: 12px;
+  line-height: 1.82;
+  color: var(--tx-mid);
+  border-left: 3px solid var(--bring-bd);
+  padding: 11px 14px;
+  background: var(--bg-bring);
+  border-radius: 0 4px 4px 0;
+  transition: color .35s, border-color .35s, background .35s;
+}
+.bring strong { color: var(--tx-primary); font-weight:600; transition: color .35s; }
+
+.rf {
+  margin-top: 24px;
+  padding-top: 12px;
+  border-top: 1px solid var(--rule);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: border-color .35s;
+}
+.rf-l {
+  font-family: 'DM Serif Display', serif;
+  font-size: 12px;
+  color: var(--teal);
+  font-style: italic;
+  transition: color .35s;
+}
+.rf-r {
+  font-size: 10.5px;
+  color: var(--tx-muted);
+  font-style: italic;
+  transition: color .35s;
+}
+
+/* ═══════════════════════════════════════════
+   PRINT
+═══════════════════════════════════════════ */
+@media print {
+  body { background: white; padding: 0; }
+  .sheet { box-shadow: none; width: 100%; }
+  .toggle-wrap { display: none; }
+  [data-theme="dark"] .sheet { background: white !important; }
+  [data-theme="dark"] .sidebar { background: #f5f5f3 !important; }
+  [data-theme="dark"] .hd { background: #111 !important; }
+  [data-theme="dark"] * { color: inherit; }
+  .matrix-wrap { height: auto !important; }
+  .detail { display: none !important; }
+  .card { opacity: 1 !important; transform: none !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── MOON TOGGLE ─────────────────────────────────────────── -->
+<div class="toggle-wrap" onclick="toggleTheme()" title="Toggle dark / light mode">
+  <div class="toggle-label" id="toggle-lbl">Light</div>
+  <div class="toggle-switch">
+    <div class="toggle-knob" id="toggle-knob">☀️</div>
+  </div>
+</div>
+
+<div class="sheet">
+
+  <!-- HEADER -->
+  <header class="hd">
+    <div class="hd-name">Srinivas CV</div>
+    <div class="hd-role">UX Designer &nbsp;·&nbsp; Human Factors Specialist &nbsp;·&nbsp; 20 Years Safety-Critical HMI</div>
+    <div class="hd-row">
+      <span>Bengaluru, India</span>
+      <div class="hd-sep"></div>
+      <a href="https://linkedin.com/in/srinivas-cv-117b7430b" target="_blank">linkedin.com/in/srinivas-cv-117b7430b</a>
+      <div class="hd-sep"></div>
+      <a href="https://medium.com/@sr.viewsun" target="_blank">medium.com/@sr.viewsun</a>
+      <div class="hd-sep"></div>
+      <span>UX Certification — In Progress</span>
+    </div>
+  </header>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="s-sec">
+        <span class="s-lbl">Expertise</span>
+        <div class="s-i">Safety-Critical HMI Design</div>
+        <div class="s-i">High Performance SCADA</div>
+        <div class="s-i">Cognitive Load Reduction</div>
+        <div class="s-i">Alarm Management · ISA-18.2</div>
+        <div class="s-i">Information Architecture</div>
+        <div class="s-i">Ambient UI Design</div>
+        <div class="s-i">UX Research &amp; Strategy</div>
+        <div class="s-i">Control Room Ergonomics</div>
+        <div class="s-i">Interaction Design</div>
+        <div class="s-i">Human Factors Advocacy</div>
+      </div>
+      <div class="s-sec">
+        <span class="s-lbl">Tools</span>
+        <div class="s-i">Figma <small>developing</small></div>
+        <div class="s-i">Wonderware / Aveva InTouch</div>
+        <div class="s-i">Siemens WinCC</div>
+        <div class="s-i">Ignition · iFix · Citect</div>
+        <div class="s-i">Adobe XD</div>
+      </div>
+      <div class="s-sec">
+        <span class="s-lbl">Education</span>
+        <div class="edu-t">UX Design Certification</div>
+        <div class="edu-s">In progress · 2025–2026</div>
+        <br>
+        <div class="edu-t">Engineering Qualification</div>
+        <div class="edu-s">Instrumentation &amp; Automation</div>
+      </div>
+      <div class="s-sec">
+        <span class="s-lbl">Standards</span>
+        <span class="s-tag">ISA-101</span>
+        <span class="s-tag">EEMUA 191</span>
+        <span class="s-tag">ISA-18.2</span>
+        <span class="s-tag">Human Factors Int'l</span>
+      </div>
+      <div class="s-sec">
+        <span class="s-lbl">Languages</span>
+        <div class="s-i">English <small>Professional</small></div>
+        <div class="s-i">Kannada · Tamil · Telugu <small>Native</small></div>
+        <div class="s-i">Hindi <small>Working</small></div>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+
+      <span class="m-sec">Profile</span>
+      <p class="profile">Twenty years designing interfaces for industrial control rooms — environments where the wrong colour choice shuts down a power plant. Now applying the same human factors rigour to consumer UX: cognitive load principles, ambient feedback systems, and information hierarchy thinking the industrial world spent thirty years proving under life-or-death conditions. Consumer software still hasn't learned it. That gap is where I work.</p>
+
+      <span class="m-sec">Experience</span>
+
+      <div class="role">
+        <div class="role-hd">
+          <div>
+            <span class="role-title">Senior HMI / SCADA Designer</span>
+            <span class="role-org"> · Current Organisation</span>
+          </div>
+          <span class="role-period">2006 – Present</span>
+        </div>
+        <ul class="buls">
+          <li>Led evolution from Classic SCADA to High Performance HMI across oil &amp; gas, power, water, and manufacturing — reducing operator fatigue and critical error rates</li>
+          <li>Designed alarm hierarchies, colour systems, and information architecture aligned with ISA-101 and EEMUA 191 for safety-critical facilities</li>
+          <li>Introduced contextual observation and iterative display testing into engineering-led design practice — bringing UX thinking to industrial environments a decade before the industry named it UX</li>
+          <li>Managed full design lifecycle from operator requirements through acceptance testing in live control rooms</li>
+        </ul>
+      </div>
+
+      <div class="role">
+        <div class="role-hd">
+          <div>
+            <span class="role-title">UX Designer — Web Application</span>
+            <span class="role-org"> · Independent Project</span>
+          </div>
+          <span class="role-period">2024 – Present</span>
+        </div>
+        <ul class="buls">
+          <li>End-to-end UX for a consumer web application — research, wireframes, prototyping, and usability validation</li>
+          <li>Published two UX case studies on Medium exploring consumer product failures through a human factors lens</li>
+        </ul>
+      </div>
+
+      <!-- PORTFOLIO -->
+      <div class="pf-row">
+        <span class="m-sec">Portfolio</span>
+        <span class="pf-hint">Click any project to explore</span>
+      </div>
+
+      <div class="matrix-wrap" id="mw">
+        <div class="grid" id="grid">
+
+          <div class="card" id="card-cogni" onclick="open_('cogni')">
+            <div class="c-tag">Published · Medium · 2025</div>
+            <div class="c-title">The Cogni-Focus</div>
+            <div class="c-desc">Ambient safety dashboard eliminating the 2.0 s eyes-off-road hazard on two-wheelers.</div>
+            <div class="c-cta">Explore <svg viewBox="0 0 12 12"><path d="M2 6h8M6 2l4 4-4 4"/></svg></div>
+          </div>
+
+          <div class="card" id="card-cobra" onclick="open_('cobra')">
+            <div class="c-tag">Concept Proposal · Ather Energy · 2026</div>
+            <div class="c-title">Advanced Cobra Hood — CH-01</div>
+            <div class="c-desc">Instrument cluster hood at rider natural eyeline — zero head tilt, shaded in any light.</div>
+            <div class="c-cta">Explore <svg viewBox="0 0 12 12"><path d="M2 6h8M6 2l4 4-4 4"/></svg></div>
+          </div>
+
+          <div class="card" id="card-windows" onclick="open_('windows')">
+            <div class="c-tag">Case Study · Microsoft · In Development</div>
+            <div class="c-title">Windows — The Silent Needle</div>
+            <div class="c-desc">How default white luminance silently harms 1.4 billion users every working day.</div>
+            <div class="c-cta">Explore <svg viewBox="0 0 12 12"><path d="M2 6h8M6 2l4 4-4 4"/></svg></div>
+          </div>
+
+          <div class="card" id="card-focus" onclick="open_('focus')">
+            <div class="c-tag">Published · Medium · 2025</div>
+            <div class="c-title">Enhanced Focus Mode — Mobile OS</div>
+            <div class="c-desc">Simplified OS interface for elderly, first-time, and accessibility-dependent users.</div>
+            <div class="c-cta">Explore <svg viewBox="0 0 12 12"><path d="M2 6h8M6 2l4 4-4 4"/></svg></div>
+          </div>
+
+        </div>
+
+        <!-- DETAIL PANELS -->
+        <div class="detail" id="d-cogni">
+          <div class="d-bar">
+            <button class="d-back" onclick="close_()"><svg viewBox="0 0 14 14"><path d="M10 7H4M7 4L4 7l3 3"/></svg> All projects</button>
+            <div class="d-modes">
+              <button class="d-mode-btn on" id="cogni-dark"  onclick="dmode('cogni','dark')">Dark</button>
+              <button class="d-mode-btn"    id="cogni-light" onclick="dmode('cogni','light')">Light</button>
+            </div>
+          </div>
+          <div class="d-visual" id="v-cogni"></div>
+          <div class="d-body">
+            <div class="d-ptag">Published · Medium · December 2025</div>
+            <div class="d-title">The Cogni-Focus</div>
+            <div class="d-desc">Every time a rider checks navigation at 60 km/h, they travel 50 meters blind. The Cogni-Focus eliminates this by replacing explicit readout with ambient colour intelligence — the screen background shifts state before the rider consciously reads anything. Peripheral vision reacts in under 100 ms. Display hierarchy rebuilt: navigation first, speed de-emphasised to reference, alerts only when genuinely critical.</div>
+            <div class="d-pills"><span class="d-pill">Ambient UI</span><span class="d-pill">Peripheral Vision</span><span class="d-pill">EORT 2.0s → 0.5s</span><span class="d-pill">ISA-18.2 Hierarchy</span><span class="d-pill">Two-Wheeler Safety</span></div>
+            <div class="d-insight">"The industrial world solved operator screen fatigue in the 1990s. High Performance SCADA removed unnecessary contrast from control room displays. The Cogni-Focus applies that same 30-year-old proven thinking to 200 million Indian riders who have normalised riding blind."</div>
+          </div>
+        </div>
+
+        <div class="detail" id="d-cobra">
+          <div class="d-bar">
+            <button class="d-back" onclick="close_()"><svg viewBox="0 0 14 14"><path d="M10 7H4M7 4L4 7l3 3"/></svg> All projects</button>
+            <div class="d-modes">
+              <button class="d-mode-btn on" id="cobra-dark"  onclick="dmode('cobra','dark')">Dark</button>
+              <button class="d-mode-btn"    id="cobra-light" onclick="dmode('cobra','light')">Light</button>
+            </div>
+          </div>
+          <div class="d-visual" id="v-cobra"></div>
+          <div class="d-body">
+            <div class="d-ptag">Concept Proposal · Ather Energy · 2026</div>
+            <div class="d-title">Advanced Cobra Hood — CH-01</div>
+            <div class="d-desc">A cobra's hood creates a canopy that permanently shades what sits beneath it. The CH-01 applies this to the instrument cluster — the display sits in the cobra's throat, shielded from direct sunlight at any angle, positioned at the rider's natural eyeline with zero head bow. Three innovations: Hood Uplift to eyeline, Ambient Colour Intelligence for speed state, and a Public Speed Beacon — the first vehicle to broadcast speed state to pedestrians and road users.</div>
+            <div class="d-pills"><span class="d-pill">Biomimetic Design</span><span class="d-pill">Hood Uplift</span><span class="d-pill">Public Speed Beacon</span><span class="d-pill">Camera Mirrors</span><span class="d-pill">Desert Visibility</span></div>
+            <div class="d-insight">"Showroom delivery personalisation — adjusting hood height to each rider at point of sale, the way luxury cars calibrate the driver's seat — makes this a service design innovation as much as a hardware concept. Nobody in two-wheeler design has done this."</div>
+          </div>
+        </div>
+
+        <div class="detail" id="d-windows">
+          <div class="d-bar">
+            <button class="d-back" onclick="close_()"><svg viewBox="0 0 14 14"><path d="M10 7H4M7 4L4 7l3 3"/></svg> All projects</button>
+            <div class="d-modes">
+              <button class="d-mode-btn on" id="windows-dark"  onclick="dmode('windows','dark')">Dark</button>
+              <button class="d-mode-btn"    id="windows-light" onclick="dmode('windows','light')">Light</button>
+            </div>
+          </div>
+          <div class="d-visual" id="v-windows"></div>
+          <div class="d-body">
+            <div class="d-ptag">Case Study · Microsoft · In Development</div>
+            <div class="d-title">Windows — The Silent Needle</div>
+            <div class="d-desc">Windows defaults to maximum white luminance across every application — Word, Excel, Edge, Outlook, Teams. A printed white page reflects light. A screen white is a light source. 1.4 billion users stare into it for eight hours daily. Nobody questions it because everyone has adapted. High Performance SCADA removed high-contrast white from industrial interfaces in the 1990s — fewer incidents, less fatigue, better decisions. Consumer software has never applied this learning.</div>
+            <div class="d-pills"><span class="d-pill">Screen Fatigue</span><span class="d-pill">Default UX</span><span class="d-pill">1.4B Users</span><span class="d-pill">HPSCADA Precedent</span><span class="d-pill">Microsoft</span><span class="d-pill">Post-Market UX</span></div>
+            <div class="d-insight">"The fix is not dark mode. The fix is a warm low-luminance default — #F5F0E8 instead of #FFFFFF — that ships as the standard. One decision. One line of code. One billion people relieved of a discomfort they had stopped expecting anyone to fix."</div>
+          </div>
+        </div>
+
+        <div class="detail" id="d-focus">
+          <div class="d-bar">
+            <button class="d-back" onclick="close_()"><svg viewBox="0 0 14 14"><path d="M10 7H4M7 4L4 7l3 3"/></svg> All projects</button>
+            <div class="d-modes">
+              <button class="d-mode-btn on" id="focus-dark"  onclick="dmode('focus','dark')">Dark</button>
+              <button class="d-mode-btn"    id="focus-light" onclick="dmode('focus','light')">Light</button>
+            </div>
+          </div>
+          <div class="d-visual" id="v-focus"></div>
+          <div class="d-body">
+            <div class="d-ptag">Published · Medium · December 2025</div>
+            <div class="d-title">Enhanced Focus Mode — Mobile OS</div>
+            <div class="d-desc">Modern smartphone OS interfaces exclude the elderly, first-time users, and people with cognitive accessibility needs — not by intent, but by default. The Enhanced Focus Mode proposes a contextual simplification layer that strips the interface to only what a specific user needs: large targets, clear labels, emergency access, and nothing else. User-configurable, not condescending — every person defines their own focus level.</div>
+            <div class="d-pills"><span class="d-pill">Accessibility</span><span class="d-pill">Digital Inclusion</span><span class="d-pill">Elderly UX</span><span class="d-pill">Cognitive Load</span><span class="d-pill">3B+ Users</span></div>
+            <div class="d-insight">"True digital inclusion doesn't mean making a different app for different people. It means making the same interface adapt to the human using it — meeting them where they are, not where the designer assumed they would be."</div>
+          </div>
+        </div>
+
+      </div><!-- .matrix-wrap -->
+
+      <span class="m-sec" style="margin-top:26px;">What I Bring That Others Don't</span>
+      <div class="bring">
+        <strong>Post-market UX thinking.</strong> Most designers measure experience before launch. I measure what products do to human beings after six months of daily use — the fatigue, the normalised discomfort, the silent suffering nobody tracks. That discipline came from twenty years watching industrial operators adapt to bad interfaces. It is the lens I bring to every consumer product problem I touch.
+      </div>
+
+      <div class="rf">
+        <span class="rf-l">"I find what products silently do to people — then fix it."</span>
+        <span class="rf-r">Designed for life, not for the demo · 2026</span>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<script>
+/* ── SVG SCENES ──────────────────────────────────────────────── */
+const SVG = {
+dark: {
+cogni:`<svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg"><rect width="560" height="200" fill="#0a2010"/><rect x="180" y="38" width="200" height="124" rx="8" fill="#0d2d1a" stroke="#1D9E75" stroke-width="1.2"/><rect x="184" y="42" width="192" height="116" rx="6" fill="#0F6E56" fill-opacity=".22"/><polygon points="268,66 284,82 276,82 276,106 260,106 260,82 252,82" fill="#1D9E75" fill-opacity=".9"/><text x="292" y="90" font-family="DM Mono,monospace" font-size="15" fill="#9FE1CB" font-weight="500">47</text><text x="292" y="105" font-family="DM Mono,monospace" font-size="9" fill="#1D9E75">km/h</text><circle cx="98" cy="92" r="15" fill="none" stroke="#9FE1CB" stroke-width=".7" stroke-opacity=".5"/><line x1="113" y1="92" x2="180" y2="100" stroke="#E24B4A" stroke-width="1.5" stroke-dasharray="5,3" stroke-opacity=".85"/><text x="116" y="83" font-family="DM Mono,monospace" font-size="9" fill="#E24B4A" fill-opacity=".9">0° tilt</text><circle cx="52" cy="160" r="9" fill="#1D9E75" fill-opacity=".8"/><text x="66" y="164" font-family="DM Mono,monospace" font-size="8" fill="#9FE1CB">Safe</text><circle cx="118" cy="160" r="9" fill="#BA7517" fill-opacity=".8"/><text x="132" y="164" font-family="DM Mono,monospace" font-size="8" fill="#FAC775">Warn</text><circle cx="184" cy="160" r="9" fill="#E24B4A" fill-opacity=".8"/><text x="198" y="164" font-family="DM Mono,monospace" font-size="8" fill="#F7C1C1">Danger</text><text x="408" y="78" font-family="DM Mono,monospace" font-size="25" fill="#1D9E75" font-weight="bold">2.0s</text><text x="408" y="93" font-family="DM Mono,monospace" font-size="9" fill="#0F6E56">current EORT</text><line x1="430" y1="102" x2="430" y2="112" stroke="#1D9E75" stroke-width="1" stroke-opacity=".4"/><text x="408" y="130" font-family="DM Mono,monospace" font-size="25" fill="#9FE1CB" font-weight="bold">0.5s</text><text x="408" y="145" font-family="DM Mono,monospace" font-size="9" fill="#1D9E75">with Cogni-Focus</text></svg>`,
+cobra:`<svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg"><rect width="560" height="200" fill="#12100a"/><ellipse cx="270" cy="95" rx="85" ry="38" fill="#1a1612" stroke="#B4B2A9" stroke-width="1.5"/><path d="M185 95 C175 80 177 63 190 53" fill="none" stroke="#5F5E5A" stroke-width=".8" opacity=".6"/><path d="M355 95 C365 80 363 63 350 53" fill="none" stroke="#5F5E5A" stroke-width=".8" opacity=".6"/><ellipse cx="248" cy="86" rx="9" ry="11" fill="#111" stroke="#444" stroke-width="1.2"/><circle cx="248" cy="87" r="5" fill="#050505"/><circle cx="246" cy="85" r="1.8" fill="white" fill-opacity=".5"/><ellipse cx="292" cy="86" rx="8" ry="10" fill="#111" stroke="#444" stroke-width="1.2"/><circle cx="292" cy="87" r="4.5" fill="#050505"/><circle cx="290" cy="85" r="1.2" fill="white" fill-opacity=".5"/><rect x="238" y="100" width="64" height="26" rx="5" fill="#0a2010" stroke="#1D9E75" stroke-width="1.5"/><text x="248" y="112" font-family="DM Mono,monospace" font-size="9" fill="#9FE1CB">47 km/h</text><polygon points="275,104 281,110 275,116 275,113 268,113 268,106 275,106" fill="#1D9E75" fill-opacity=".85"/><line x1="100" y1="95" x2="238" y2="106" stroke="#1D9E75" stroke-width="1.5" stroke-dasharray="6,3"/><text x="104" y="85" font-family="DM Mono,monospace" font-size="9" fill="#1D9E75">0° — natural gaze</text><circle cx="78" cy="95" r="16" fill="none" stroke="#9FE1CB" stroke-width=".8" stroke-opacity=".5"/><line x1="360" y1="24" x2="340" y2="49" stroke="#EF9F27" stroke-width="1.2" stroke-linecap="round" opacity=".7"/><line x1="376" y1="30" x2="354" y2="50" stroke="#EF9F27" stroke-width="1.1" stroke-linecap="round" opacity=".55"/><text x="370" y="20" font-family="DM Mono,monospace" font-size="8" fill="#BA7517" opacity=".8">sun blocked</text><circle cx="455" cy="112" r="14" fill="#EF9F27" fill-opacity=".08" stroke="#EF9F27" stroke-width="1"/><circle cx="455" cy="112" r="7" fill="#EF9F27" fill-opacity=".2" stroke="#EF9F27" stroke-width="1.2"/><circle cx="455" cy="112" r="3.5" fill="#EF9F27" fill-opacity=".8"/><text x="428" y="136" font-family="DM Mono,monospace" font-size="8" fill="#BA7517">public beacon</text></svg>`,
+windows:`<svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg"><rect width="560" height="200" fill="#0d1a14"/><rect x="55" y="28" width="185" height="145" rx="6" fill="#FFFFFF" fill-opacity=".95"/><rect x="55" y="28" width="185" height="20" rx="6" fill="#E8E8E8"/><circle cx="69" cy="38" r="4" fill="#FF5F56"/><circle cx="83" cy="38" r="4" fill="#FFBD2E"/><circle cx="97" cy="38" r="4" fill="#27C93F"/><rect x="65" y="57" width="165" height="7" rx="2" fill="#E0E0E0"/><rect x="65" y="71" width="135" height="7" rx="2" fill="#E8E8E8"/><rect x="65" y="85" width="155" height="7" rx="2" fill="#E0E0E0"/><rect x="65" y="99" width="115" height="7" rx="2" fill="#E8E8E8"/><rect x="65" y="113" width="165" height="7" rx="2" fill="#E0E0E0"/><rect x="65" y="127" width="100" height="7" rx="2" fill="#E8E8E8"/><line x1="148" y1="28" x2="200" y2="5" stroke="white" stroke-width="2" opacity=".3"/><line x1="172" y1="28" x2="235" y2="6" stroke="white" stroke-width="1.5" opacity=".2"/><text x="85" y="188" font-family="DM Mono,monospace" font-size="9" fill="#F7C1C1" opacity=".8">8hrs · every day · #FFFFFF</text><text x="272" y="104" font-family="DM Mono,monospace" font-size="12" fill="#9FE1CB">→</text><rect x="298" y="28" width="185" height="145" rx="6" fill="#F5F0E8" fill-opacity=".1" stroke="#1D9E75" stroke-width="1"/><rect x="308" y="57" width="165" height="7" rx="2" fill="#9FE1CB" fill-opacity=".22"/><rect x="308" y="71" width="135" height="7" rx="2" fill="#9FE1CB" fill-opacity=".16"/><rect x="308" y="85" width="155" height="7" rx="2" fill="#9FE1CB" fill-opacity=".2"/><rect x="308" y="99" width="115" height="7" rx="2" fill="#9FE1CB" fill-opacity=".14"/><rect x="308" y="113" width="165" height="7" rx="2" fill="#9FE1CB" fill-opacity=".2"/><rect x="308" y="127" width="100" height="7" rx="2" fill="#9FE1CB" fill-opacity=".16"/><text x="318" y="188" font-family="DM Mono,monospace" font-size="9" fill="#1D9E75">#F5F0E8 · warm · no strain</text><text x="75" y="24" font-family="DM Mono,monospace" font-size="20" fill="#E24B4A" font-weight="bold">1.4B</text></svg>`,
+focus:`<svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg"><rect width="560" height="200" fill="#0a1520"/><rect x="48" y="18" width="108" height="172" rx="10" fill="#0d1520" stroke="#333" stroke-width="1"/><rect x="48" y="18" width="108" height="16" rx="10" fill="#1a2535"/><rect x="56" y="44" width="18" height="18" rx="3" fill="#FF5F56" fill-opacity=".7"/><rect x="80" y="44" width="18" height="18" rx="3" fill="#FFBD2E" fill-opacity=".7"/><rect x="104" y="44" width="18" height="18" rx="3" fill="#27C93F" fill-opacity=".7"/><rect x="56" y="68" width="18" height="18" rx="3" fill="#378ADD" fill-opacity=".7"/><rect x="80" y="68" width="18" height="18" rx="3" fill="#7F77DD" fill-opacity=".7"/><rect x="104" y="68" width="18" height="18" rx="3" fill="#D85A30" fill-opacity=".7"/><rect x="56" y="92" width="18" height="18" rx="3" fill="#D4537E" fill-opacity=".6"/><rect x="80" y="92" width="18" height="18" rx="3" fill="#639922" fill-opacity=".6"/><rect x="104" y="92" width="18" height="18" rx="3" fill="#FF5F56" fill-opacity=".5"/><rect x="56" y="116" width="18" height="18" rx="3" fill="#378ADD" fill-opacity=".5"/><rect x="80" y="116" width="18" height="18" rx="3" fill="#FFBD2E" fill-opacity=".5"/><rect x="104" y="116" width="18" height="18" rx="3" fill="#7F77DD" fill-opacity=".5"/><text x="102" y="184" font-family="DM Mono,monospace" font-size="8" fill="#F7C1C1" text-anchor="middle">overwhelming</text><text x="170" y="108" font-family="DM Mono,monospace" font-size="18" fill="#1D9E75">→</text><rect x="192" y="18" width="108" height="172" rx="10" fill="#0d1520" stroke="#1D9E75" stroke-width="1.5"/><rect x="192" y="18" width="108" height="16" rx="10" fill="#0F2820"/><text x="246" y="30" font-family="DM Mono,monospace" font-size="7" fill="#9FE1CB" text-anchor="middle">Focus Mode</text><circle cx="246" cy="96" r="24" fill="#1D9E75" fill-opacity=".18" stroke="#1D9E75" stroke-width="1.5"/><text x="246" y="93" font-family="DM Mono,monospace" font-size="10" fill="#9FE1CB" text-anchor="middle">Call</text><rect x="204" y="134" width="30" height="20" rx="3" fill="#1D9E75" fill-opacity=".2" stroke="#1D9E75" stroke-width=".8"/><text x="219" y="147" font-family="DM Mono,monospace" font-size="7" fill="#9FE1CB" text-anchor="middle">SOS</text><rect x="240" y="134" width="30" height="20" rx="3" fill="#1D9E75" fill-opacity=".2" stroke="#1D9E75" stroke-width=".8"/><text x="255" y="147" font-family="DM Mono,monospace" font-size="7" fill="#9FE1CB" text-anchor="middle">SMS</text><text x="246" y="182" font-family="DM Mono,monospace" font-size="7" fill="#1D9E75" text-anchor="middle">calm · clear · safe</text><text x="368" y="78" font-family="DM Mono,monospace" font-size="24" fill="#1D9E75" font-weight="bold">3B+</text><text x="368" y="93" font-family="DM Mono,monospace" font-size="8" fill="#0F6E56">seniors globally</text><text x="368" y="116" font-family="DM Mono,monospace" font-size="10" fill="#9FE1CB">Technology should</text><text x="368" y="130" font-family="DM Mono,monospace" font-size="10" fill="#9FE1CB">adapt to humans —</text><text x="368" y="144" font-family="DM Mono,monospace" font-size="10" fill="#1D9E75">not the reverse.</text></svg>`
+},
+light: {
+cogni:`<svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg"><rect width="560" height="200" fill="#F6F3ED"/><rect x="180" y="38" width="200" height="124" rx="8" fill="#fff" stroke="#0F6E56" stroke-width="1.5"/><rect x="184" y="42" width="192" height="116" rx="6" fill="#E1F5EE"/><polygon points="268,66 284,82 276,82 276,106 260,106 260,82 252,82" fill="#0F6E56" fill-opacity=".9"/><text x="292" y="90" font-family="DM Mono,monospace" font-size="15" fill="#085041" font-weight="500">47</text><text x="292" y="105" font-family="DM Mono,monospace" font-size="9" fill="#0F6E56">km/h</text><circle cx="98" cy="92" r="15" fill="none" stroke="#3d3c3a" stroke-width=".7" stroke-opacity=".4"/><line x1="113" y1="92" x2="180" y2="100" stroke="#E24B4A" stroke-width="1.5" stroke-dasharray="5,3"/><text x="116" y="83" font-family="DM Mono,monospace" font-size="9" fill="#E24B4A">0° tilt</text><circle cx="52" cy="160" r="9" fill="#1D9E75"/><text x="66" y="164" font-family="DM Mono,monospace" font-size="8" fill="#085041">Safe</text><circle cx="118" cy="160" r="9" fill="#BA7517"/><text x="132" y="164" font-family="DM Mono,monospace" font-size="8" fill="#633806">Warn</text><circle cx="184" cy="160" r="9" fill="#E24B4A"/><text x="198" y="164" font-family="DM Mono,monospace" font-size="8" fill="#791F1F">Danger</text><text x="408" y="78" font-family="DM Mono,monospace" font-size="25" fill="#3d3c3a" font-weight="bold">2.0s</text><text x="408" y="93" font-family="DM Mono,monospace" font-size="9" fill="#7a7870">current EORT</text><line x1="430" y1="102" x2="430" y2="112" stroke="#D4D1C8" stroke-width="1"/><text x="408" y="130" font-family="DM Mono,monospace" font-size="25" fill="#0F6E56" font-weight="bold">0.5s</text><text x="408" y="145" font-family="DM Mono,monospace" font-size="9" fill="#0F6E56">with Cogni-Focus</text></svg>`,
+cobra:`<svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg"><rect width="560" height="200" fill="#F0EDE6"/><ellipse cx="270" cy="95" rx="85" ry="38" fill="#e8e5de" stroke="#3d3c3a" stroke-width="1.5"/><path d="M185 95 C175 80 177 63 190 53" fill="none" stroke="#aaa8a0" stroke-width=".8" opacity=".8"/><path d="M355 95 C365 80 363 63 350 53" fill="none" stroke="#aaa8a0" stroke-width=".8" opacity=".8"/><ellipse cx="248" cy="86" rx="9" ry="11" fill="#ddd9d0" stroke="#3d3c3a" stroke-width="1.2"/><circle cx="248" cy="87" r="5" fill="#1a1917"/><circle cx="246" cy="85" r="1.5" fill="white" fill-opacity=".6"/><ellipse cx="292" cy="86" rx="8" ry="10" fill="#ddd9d0" stroke="#3d3c3a" stroke-width="1.2"/><circle cx="292" cy="87" r="4.5" fill="#1a1917"/><circle cx="290" cy="85" r="1.2" fill="white" fill-opacity=".5"/><rect x="238" y="100" width="64" height="26" rx="5" fill="#E1F5EE" stroke="#0F6E56" stroke-width="1.5"/><text x="248" y="112" font-family="DM Mono,monospace" font-size="9" fill="#085041">47 km/h</text><polygon points="275,104 281,110 275,116 275,113 268,113 268,106 275,106" fill="#0F6E56" fill-opacity=".9"/><line x1="100" y1="95" x2="238" y2="106" stroke="#0F6E56" stroke-width="1.5" stroke-dasharray="6,3"/><text x="104" y="85" font-family="DM Mono,monospace" font-size="9" fill="#0F6E56">0° — natural gaze</text><circle cx="78" cy="95" r="16" fill="none" stroke="#3d3c3a" stroke-width=".7" stroke-opacity=".5"/><line x1="360" y1="24" x2="340" y2="49" stroke="#BA7517" stroke-width="1.2" stroke-linecap="round"/><line x1="376" y1="30" x2="354" y2="50" stroke="#BA7517" stroke-width="1.1" stroke-linecap="round" opacity=".7"/><text x="368" y="20" font-family="DM Mono,monospace" font-size="8" fill="#633806">sun blocked</text><circle cx="455" cy="112" r="13" fill="#FAEEDA" stroke="#BA7517" stroke-width="1"/><circle cx="455" cy="112" r="6" fill="#EF9F27" fill-opacity=".4" stroke="#BA7517" stroke-width="1.2"/><circle cx="455" cy="112" r="3" fill="#BA7517"/><text x="428" y="135" font-family="DM Mono,monospace" font-size="8" fill="#633806">public beacon</text></svg>`,
+windows:`<svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg"><rect width="560" height="200" fill="#F6F3ED"/><rect x="55" y="28" width="185" height="145" rx="6" fill="#FFFFFF" stroke="#D4D1C8" stroke-width="1"/><rect x="55" y="28" width="185" height="20" rx="6" fill="#E8E8E8"/><circle cx="69" cy="38" r="4" fill="#FF5F56"/><circle cx="83" cy="38" r="4" fill="#FFBD2E"/><circle cx="97" cy="38" r="4" fill="#27C93F"/><rect x="65" y="57" width="165" height="7" rx="2" fill="#E0E0E0"/><rect x="65" y="71" width="135" height="7" rx="2" fill="#E8E8E8"/><rect x="65" y="85" width="155" height="7" rx="2" fill="#E0E0E0"/><rect x="65" y="99" width="115" height="7" rx="2" fill="#E8E8E8"/><rect x="65" y="113" width="165" height="7" rx="2" fill="#E0E0E0"/><rect x="65" y="127" width="100" height="7" rx="2" fill="#E8E8E8"/><text x="85" y="188" font-family="DM Mono,monospace" font-size="9" fill="#A32D2D">harsh · #FFFFFF · light source</text><text x="272" y="104" font-family="DM Mono,monospace" font-size="12" fill="#3d3c3a">→</text><rect x="298" y="28" width="185" height="145" rx="6" fill="#F5F0E8" stroke="#0F6E56" stroke-width="1"/><rect x="298" y="28" width="185" height="20" rx="6" fill="#EDE9E0"/><rect x="308" y="57" width="165" height="7" rx="2" fill="#C8D8C8"/><rect x="308" y="71" width="135" height="7" rx="2" fill="#D0D8D0"/><rect x="308" y="85" width="155" height="7" rx="2" fill="#C8D8C8"/><rect x="308" y="99" width="115" height="7" rx="2" fill="#D0D8D0"/><rect x="308" y="113" width="165" height="7" rx="2" fill="#C8D8C8"/><rect x="308" y="127" width="100" height="7" rx="2" fill="#D0D8D0"/><text x="318" y="188" font-family="DM Mono,monospace" font-size="9" fill="#085041">warm · #F5F0E8 · no strain</text><text x="75" y="24" font-family="DM Mono,monospace" font-size="20" fill="#E24B4A" font-weight="bold">1.4B</text></svg>`,
+focus:`<svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg"><rect width="560" height="200" fill="#F6F3ED"/><rect x="48" y="18" width="108" height="172" rx="10" fill="#fff" stroke="#D4D1C8" stroke-width="1"/><rect x="48" y="18" width="108" height="16" rx="10" fill="#E8E8E8"/><rect x="56" y="44" width="18" height="18" rx="3" fill="#FF5F56" fill-opacity=".7"/><rect x="80" y="44" width="18" height="18" rx="3" fill="#FFBD2E" fill-opacity=".7"/><rect x="104" y="44" width="18" height="18" rx="3" fill="#27C93F" fill-opacity=".7"/><rect x="56" y="68" width="18" height="18" rx="3" fill="#378ADD" fill-opacity=".7"/><rect x="80" y="68" width="18" height="18" rx="3" fill="#7F77DD" fill-opacity=".7"/><rect x="104" y="68" width="18" height="18" rx="3" fill="#D85A30" fill-opacity=".7"/><rect x="56" y="92" width="18" height="18" rx="3" fill="#D4537E" fill-opacity=".6"/><rect x="80" y="92" width="18" height="18" rx="3" fill="#639922" fill-opacity=".6"/><rect x="104" y="92" width="18" height="18" rx="3" fill="#FF5F56" fill-opacity=".5"/><rect x="56" y="116" width="18" height="18" rx="3" fill="#378ADD" fill-opacity=".5"/><rect x="80" y="116" width="18" height="18" rx="3" fill="#FFBD2E" fill-opacity=".5"/><rect x="104" y="116" width="18" height="18" rx="3" fill="#7F77DD" fill-opacity=".5"/><text x="102" y="184" font-family="DM Mono,monospace" font-size="8" fill="#A32D2D" text-anchor="middle">overwhelming</text><text x="170" y="108" font-family="DM Mono,monospace" font-size="16" fill="#0F6E56">→</text><rect x="192" y="18" width="108" height="172" rx="10" fill="#E1F5EE" stroke="#0F6E56" stroke-width="1.5"/><rect x="192" y="18" width="108" height="16" rx="10" fill="#C8EAD8"/><text x="246" y="30" font-family="DM Mono,monospace" font-size="7" fill="#085041" text-anchor="middle">Focus Mode</text><circle cx="246" cy="96" r="24" fill="#0F6E56" fill-opacity=".14" stroke="#0F6E56" stroke-width="1.5"/><text x="246" y="93" font-family="DM Mono,monospace" font-size="10" fill="#085041" text-anchor="middle">Call</text><rect x="204" y="134" width="30" height="20" rx="3" fill="#0F6E56" fill-opacity=".14" stroke="#0F6E56" stroke-width=".8"/><text x="219" y="147" font-family="DM Mono,monospace" font-size="7" fill="#085041" text-anchor="middle">SOS</text><rect x="240" y="134" width="30" height="20" rx="3" fill="#0F6E56" fill-opacity=".14" stroke="#0F6E56" stroke-width=".8"/><text x="255" y="147" font-family="DM Mono,monospace" font-size="7" fill="#085041" text-anchor="middle">SMS</text><text x="246" y="182" font-family="DM Mono,monospace" font-size="7" fill="#0F6E56" text-anchor="middle">calm · clear · safe</text><text x="368" y="78" font-family="DM Mono,monospace" font-size="24" fill="#3d3c3a" font-weight="bold">3B+</text><text x="368" y="93" font-family="DM Mono,monospace" font-size="8" fill="#7a7870">seniors globally</text><text x="368" y="116" font-family="DM Mono,monospace" font-size="10" fill="#3d3c3a">Technology should</text><text x="368" y="130" font-family="DM Mono,monospace" font-size="10" fill="#3d3c3a">adapt to humans —</text><text x="368" y="144" font-family="DM Mono,monospace" font-size="10" fill="#0F6E56">not the reverse.</text></svg>`
+}
+};
+
+const BG = {
+  dark:   { cogni:'#0a2010', cobra:'#12100a', windows:'#0d1a14', focus:'#0a1520' },
+  light:  { cogni:'#F6F3ED', cobra:'#F0EDE6', windows:'#F6F3ED', focus:'#F6F3ED' }
+};
+
+const KEYS = ['cogni','cobra','windows','focus'];
+let active = null;
+let detailModes = { cogni:'dark', cobra:'dark', windows:'dark', focus:'dark' };
+
+/* ── GLOBAL THEME TOGGLE ─────────────────────────────────── */
+function toggleTheme() {
+  const html  = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  const next   = isDark ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  document.getElementById('toggle-lbl').textContent  = isDark ? 'Light' : 'Dark';
+  document.getElementById('toggle-knob').textContent = isDark ? '☀️'   : '🌙';
+}
+
+/* ── SIZE MATRIX WRAP ────────────────────────────────────── */
+function sizeWrap() {
+  const g = document.getElementById('grid');
+  const h = g.offsetHeight;
+  const mw = document.getElementById('mw');
+  mw.style.height = h + 'px';
+  KEYS.forEach(k => {
+    const d = document.getElementById('d-'+k);
+    if (d) d.style.height = h + 'px';
+  });
+}
+
+/* ── OPEN DETAIL ─────────────────────────────────────────── */
+function open_(key) {
+  active = key;
+  KEYS.forEach(k => {
+    const c = document.getElementById('card-'+k);
+    if (k !== key) c.classList.add('dissolve');
+    else { c.style.opacity='0'; c.style.pointerEvents='none'; }
+  });
+  setTimeout(() => {
+    document.getElementById('d-'+key).classList.add('open');
+  }, 230);
+}
+
+/* ── CLOSE DETAIL ────────────────────────────────────────── */
+function close_() {
+  if (!active) return;
+  const key = active;
+  document.getElementById('d-'+key).classList.remove('open');
+  setTimeout(() => {
+    KEYS.forEach(k => {
+      const c = document.getElementById('card-'+k);
+      c.classList.remove('dissolve');
+      c.style.opacity = '';
+      c.style.pointerEvents = '';
+    });
+    active = null;
+  }, 200);
+}
+
+/* ── DETAIL DARK/LIGHT MODE ──────────────────────────────── */
+function dmode(key, mode) {
+  detailModes[key] = mode;
+  const v  = document.getElementById('v-'+key);
+  const db = document.getElementById(key+'-dark');
+  const lb = document.getElementById(key+'-light');
+  v.style.background = BG[mode][key];
+  v.innerHTML = SVG[mode][key];
+  if (mode === 'dark') {
+    db.classList.add('on'); lb.classList.remove('on');
+  } else {
+    lb.classList.add('on'); db.classList.remove('on');
+  }
+}
+
+/* ── INIT ────────────────────────────────────────────────── */
+window.addEventListener('DOMContentLoaded', () => {
+  KEYS.forEach(k => {
+    const v = document.getElementById('v-'+k);
+    v.style.background = BG.dark[k];
+    v.innerHTML = SVG.dark[k];
+  });
+  sizeWrap();
+});
+window.addEventListener('resize', sizeWrap);
+</script>
+</body>
+</html>

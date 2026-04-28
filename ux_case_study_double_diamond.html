@@ -1,0 +1,973 @@
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+
+  .cs-root {
+    font-family: 'DM Sans', sans-serif;
+    color: var(--color-text-primary);
+    background: transparent;
+    max-width: 680px;
+    padding: 0 0 2rem;
+  }
+
+  /* ── HERO ── */
+  .cs-hero {
+    background: #2C1810;
+    border-radius: var(--border-radius-lg);
+    padding: 3rem 2.5rem 2.5rem;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .cs-hero-glow {
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,200,100,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .cs-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #E8A84A;
+    border: 0.5px solid #E8A84A;
+    border-radius: 20px;
+    padding: 3px 10px;
+    margin-bottom: 1.2rem;
+  }
+  .cs-hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 600;
+    line-height: 1.15;
+    color: #F5EDD8;
+    margin: 0 0 1rem;
+  }
+  .cs-hero h1 em { font-style: italic; color: #E8A84A; }
+  .cs-hero-sub {
+    font-size: 15px;
+    font-weight: 300;
+    color: #A89880;
+    line-height: 1.6;
+    max-width: 520px;
+    margin: 0 0 2rem;
+  }
+  .cs-meta { display: flex; gap: 2rem; flex-wrap: wrap; }
+  .cs-meta-item { display: flex; flex-direction: column; gap: 2px; }
+  .cs-meta-label {
+    font-size: 10px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: #6B5A4A;
+  }
+  .cs-meta-value { font-size: 13px; font-weight: 500; color: #D4C4A8; }
+
+  /* ── DOUBLE DIAMOND OVERVIEW ── */
+  .dd-overview {
+    margin: 0 0 2.5rem;
+    padding: 1.5rem;
+    background: var(--color-background-secondary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+  }
+  .dd-overview-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    margin-bottom: 1.25rem;
+    text-align: center;
+  }
+  .dd-diagram {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    margin-bottom: 1rem;
+    overflow: hidden;
+    border-radius: 8px;
+  }
+  .dd-phase {
+    flex: 1;
+    text-align: center;
+    padding: 14px 8px 12px;
+    position: relative;
+    cursor: default;
+  }
+  .dd-phase.discover  { background: #1A3040; }
+  .dd-phase.define    { background: #1A2E20; }
+  .dd-phase.develop   { background: #2A2010; }
+  .dd-phase.deliver   { background: #201830; }
+  .dd-phase-icon { font-size: 18px; display: block; margin-bottom: 4px; }
+  .dd-phase-name {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 3px;
+  }
+  .dd-phase.discover  .dd-phase-name { color: #7FC8E8; }
+  .dd-phase.define    .dd-phase-name { color: #7FD4A0; }
+  .dd-phase.develop   .dd-phase-name { color: #E8C87F; }
+  .dd-phase.deliver   .dd-phase-name { color: #C8A8E8; }
+  .dd-phase-label {
+    font-size: 9px;
+    font-weight: 300;
+    color: rgba(255,255,255,.4);
+    letter-spacing: .5px;
+  }
+  .dd-phase-arrow {
+    position: absolute;
+    right: -1px; top: 50%;
+    transform: translateY(-50%);
+    width: 0; height: 0;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    z-index: 2;
+  }
+  .dd-phase.discover  .dd-phase-arrow { border-left: 8px solid #1A3040; }
+  .dd-phase.define    .dd-phase-arrow { border-left: 8px solid #1A2E20; }
+  .dd-phase.develop   .dd-phase-arrow { border-left: 8px solid #2A2010; }
+
+  .dd-diverge-tag {
+    font-size: 9px;
+    color: var(--color-text-secondary);
+    text-align: center;
+    letter-spacing: .5px;
+    opacity: .7;
+  }
+  .dd-phases-labels {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 6px;
+  }
+
+  /* active phase highlight pill */
+  .dd-active-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    border-radius: 20px;
+    padding: 3px 12px 3px 8px;
+    margin-bottom: 0.5rem;
+  }
+  .dd-active-pill .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .dd-active-pill.discover  { background: rgba(127,200,232,.12); color: #7FC8E8; }
+  .dd-active-pill.discover  .dot { background: #7FC8E8; }
+  .dd-active-pill.define    { background: rgba(127,212,160,.12); color: #7FD4A0; }
+  .dd-active-pill.define    .dot { background: #7FD4A0; }
+  .dd-active-pill.develop   { background: rgba(232,200,127,.12); color: #E8C87F; }
+  .dd-active-pill.develop   .dot { background: #E8C87F; }
+  .dd-active-pill.deliver   { background: rgba(200,168,232,.12); color: #C8A8E8; }
+  .dd-active-pill.deliver   .dot { background: #C8A8E8; }
+
+  /* ── SECTION ── */
+  .cs-section { margin-bottom: 2rem; }
+  .cs-section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1rem;
+  }
+  .cs-section-num {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    color: var(--color-text-secondary);
+    min-width: 28px;
+  }
+  .cs-section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0;
+    color: var(--color-text-primary);
+  }
+  .cs-divider {
+    height: 0.5px;
+    background: var(--color-border-tertiary);
+    flex: 1;
+  }
+  .cs-body {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--color-text-secondary);
+    margin: 0 0 1rem;
+  }
+  .cs-highlight {
+    background: #F5F0E8;
+    border-left: 3px solid #C4935A;
+    border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0;
+    padding: 1rem 1.25rem;
+    margin: 1.25rem 0;
+    font-style: italic;
+    font-size: 15px;
+    color: #5A3E28;
+    line-height: 1.7;
+  }
+  @media (prefers-color-scheme: dark) {
+    .cs-highlight { background: #2A1F14; color: #D4B896; }
+  }
+
+  /* ── CARDS ── */
+  .cs-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin: 1rem 0;
+  }
+  .cs-card {
+    background: var(--color-background-secondary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    padding: 1rem 1.1rem;
+  }
+  .cs-card-icon { font-size: 20px; margin-bottom: 8px; display: block; }
+  .cs-card-title { font-size: 13px; font-weight: 500; margin: 0 0 4px; color: var(--color-text-primary); }
+  .cs-card-body { font-size: 12px; color: var(--color-text-secondary); line-height: 1.5; margin: 0; }
+
+  /* ── HMW CARDS ── */
+  .cs-hmw-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 1rem 0;
+  }
+  .cs-hmw-card {
+    background: rgba(127,212,160,.06);
+    border: 0.5px solid rgba(127,212,160,.25);
+    border-radius: var(--border-radius-md);
+    padding: 12px 14px;
+  }
+  .cs-hmw-label {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #7FD4A0;
+    margin-bottom: 5px;
+    display: block;
+  }
+  .cs-hmw-text {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* ── INSIGHT CARDS ── */
+  .cs-insight-stack { display: flex; flex-direction: column; gap: 10px; margin: 1rem 0; }
+  .cs-insight-card {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    background: var(--color-background-secondary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-md);
+    padding: 12px 14px;
+  }
+  .cs-insight-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: #C4935A;
+    min-width: 22px;
+    padding-top: 2px;
+  }
+  .cs-insight-body { flex: 1; }
+  .cs-insight-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin: 0 0 3px; }
+  .cs-insight-desc { font-size: 12px; color: var(--color-text-secondary); line-height: 1.55; margin: 0; }
+
+  /* ── IDEATION CARDS ── */
+  .cs-idea-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 1rem 0;
+  }
+  .cs-idea-card {
+    background: rgba(232,200,127,.06);
+    border: 0.5px solid rgba(232,200,127,.2);
+    border-radius: var(--border-radius-md);
+    padding: 12px 14px;
+  }
+  .cs-idea-status {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    display: block;
+  }
+  .cs-idea-status.pursued { color: #7FD4A0; }
+  .cs-idea-status.rejected { color: #E87F7F; }
+  .cs-idea-status.partial { color: #E8C87F; }
+  .cs-idea-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin: 0 0 4px; }
+  .cs-idea-reason { font-size: 11.5px; color: var(--color-text-secondary); line-height: 1.5; margin: 0; }
+
+  /* ── SWATCH ── */
+  .cs-swatch-row {
+    display: flex; gap: 12px;
+    align-items: flex-end;
+    margin: 1.25rem 0;
+    flex-wrap: wrap;
+  }
+  .cs-swatch {
+    border-radius: var(--border-radius-md);
+    border: 0.5px solid var(--color-border-tertiary);
+    overflow: hidden; width: 100px;
+  }
+  .cs-swatch-color { height: 56px; width: 100%; }
+  .cs-swatch-info { padding: 6px 8px; background: var(--color-background-primary); }
+  .cs-swatch-name { font-size: 11px; font-weight: 500; color: var(--color-text-primary); margin: 0 0 2px; }
+  .cs-swatch-hex { font-size: 10px; font-family: monospace; color: var(--color-text-secondary); margin: 0; }
+  .cs-swatch-label { font-size: 11px; color: var(--color-text-secondary); margin-bottom: 4px; }
+
+  /* ── CONTRAST BARS ── */
+  .cs-contrast-bar {
+    height: 8px; border-radius: 4px;
+    background: var(--color-background-secondary);
+    overflow: hidden; margin: 6px 0 2px;
+  }
+  .cs-contrast-fill { height: 100%; border-radius: 4px; }
+  .cs-contrast-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--color-text-secondary); }
+
+  /* ── TIMELINE ── */
+  .cs-timeline { position: relative; padding-left: 1.5rem; margin: 1rem 0; }
+  .cs-timeline::before {
+    content: ''; position: absolute;
+    left: 4px; top: 8px; bottom: 8px;
+    width: 1px; background: var(--color-border-tertiary);
+  }
+  .cs-tl-item { position: relative; margin-bottom: 1.25rem; }
+  .cs-tl-item:last-child { margin-bottom: 0; }
+  .cs-tl-dot {
+    position: absolute; left: -1.29rem; top: 4px;
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #C4935A;
+    border: 2px solid var(--color-background-primary);
+    box-sizing: border-box;
+  }
+  .cs-tl-year { font-size: 11px; font-weight: 600; color: #C4935A; margin: 0 0 2px; }
+  .cs-tl-text { font-size: 13px; color: var(--color-text-secondary); line-height: 1.55; margin: 0; }
+
+  /* ── IMPACT GRID ── */
+  .cs-impact-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px; margin: 1rem 0;
+  }
+  .cs-impact-cell {
+    background: var(--color-background-secondary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    padding: 1rem; text-align: center;
+  }
+  .cs-impact-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px; font-weight: 600;
+    color: #C4935A; display: block; margin-bottom: 6px;
+  }
+  .cs-impact-desc { font-size: 12px; color: var(--color-text-secondary); line-height: 1.5; margin: 0; }
+
+  /* ── SOLUTION PANEL ── */
+  .cs-solution-panel {
+    background: var(--color-background-secondary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    padding: 1.25rem; margin: 1rem 0;
+  }
+  .cs-solution-panel h3 { font-size: 14px; font-weight: 500; color: var(--color-text-primary); margin: 0 0 0.75rem; }
+  .cs-sol-row {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 13px; color: var(--color-text-secondary);
+    padding: 6px 0;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+    line-height: 1.4;
+  }
+  .cs-sol-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .cs-sol-dot { width: 6px; height: 6px; border-radius: 50%; background: #C4935A; flex-shrink: 0; }
+
+  /* ── PRECEDENT TABLE ── */
+  .cs-precedent {
+    width: 100%; border-collapse: collapse;
+    font-size: 13px; margin: 1rem 0;
+  }
+  .cs-precedent th {
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 1px; text-transform: uppercase;
+    color: var(--color-text-secondary);
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--color-border-tertiary);
+    text-align: left;
+  }
+  .cs-precedent td {
+    padding: 10px 12px;
+    color: var(--color-text-secondary);
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+    line-height: 1.5;
+    vertical-align: top;
+  }
+  .cs-precedent tr:last-child td { border-bottom: none; }
+  .cs-precedent td:first-child { font-weight: 500; color: var(--color-text-primary); white-space: nowrap; }
+
+  /* ── METRICS OUTCOME ── */
+  .cs-outcome-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px; margin: 1rem 0;
+  }
+  .cs-outcome-card {
+    background: rgba(200,168,232,.07);
+    border: 0.5px solid rgba(200,168,232,.22);
+    border-radius: var(--border-radius-md);
+    padding: 12px 14px;
+    text-align: center;
+  }
+  .cs-outcome-metric {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-weight: 600;
+    color: #C8A8E8; display: block; margin-bottom: 4px;
+  }
+  .cs-outcome-label { font-size: 11px; color: var(--color-text-secondary); line-height: 1.5; margin: 0; }
+
+  /* ── CLOSING STATEMENT ── */
+  .cs-closing {
+    background: #1A0F0A;
+    border-radius: var(--border-radius-lg);
+    padding: 2rem 2.5rem;
+    margin-top: 2rem;
+    text-align: center;
+  }
+  .cs-closing-quote {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px; font-style: italic;
+    color: #E8C87F; line-height: 1.6;
+    margin: 0 0 1rem;
+  }
+  .cs-closing-author {
+    font-size: 12px; color: #6B5A4A;
+    letter-spacing: 0.5px;
+  }
+</style>
+
+<div class="cs-root">
+
+  <!-- HERO -->
+  <div class="cs-hero">
+    <div class="cs-hero-glow"></div>
+    <div class="cs-tag">UX Case Study · Double Diamond</div>
+    <h1>The <em>Blinding</em> Default:<br>White Screens & Visual Fatigue</h1>
+    <p class="cs-hero-sub">How a 50-year-old metaphor borrowed from paper quietly became one of the most pervasive, unaddressed ergonomic failures in the history of computing — and what the Double Diamond reveals about why it persists.</p>
+    <div class="cs-meta">
+      <div class="cs-meta-item">
+        <span class="cs-meta-label">Scope</span>
+        <span class="cs-meta-value">Systemic / Industry</span>
+      </div>
+      <div class="cs-meta-item">
+        <span class="cs-meta-label">Duration</span>
+        <span class="cs-meta-value">20 years lived research</span>
+      </div>
+      <div class="cs-meta-item">
+        <span class="cs-meta-label">Role</span>
+        <span class="cs-meta-value">Researcher & Advocate</span>
+      </div>
+      <div class="cs-meta-item">
+        <span class="cs-meta-label">Methodology</span>
+        <span class="cs-meta-value">Double Diamond · UCD</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOUBLE DIAMOND OVERVIEW -->
+  <div class="dd-overview">
+    <div class="dd-overview-title">Design Process — Double Diamond Framework</div>
+    <div class="dd-diagram">
+      <div class="dd-phase discover">
+        <span class="dd-phase-icon">🔍</span>
+        <span class="dd-phase-name">Discover</span>
+        <span class="dd-phase-label">Diverge · Explore</span>
+        <div class="dd-phase-arrow"></div>
+      </div>
+      <div class="dd-phase define">
+        <span class="dd-phase-icon">🎯</span>
+        <span class="dd-phase-name">Define</span>
+        <span class="dd-phase-label">Converge · Frame</span>
+        <div class="dd-phase-arrow"></div>
+      </div>
+      <div class="dd-phase develop">
+        <span class="dd-phase-icon">💡</span>
+        <span class="dd-phase-name">Develop</span>
+        <span class="dd-phase-label">Diverge · Ideate</span>
+        <div class="dd-phase-arrow"></div>
+      </div>
+      <div class="dd-phase deliver">
+        <span class="dd-phase-icon">🚀</span>
+        <span class="dd-phase-name">Deliver</span>
+        <span class="dd-phase-label">Converge · Ship</span>
+      </div>
+    </div>
+    <div class="dd-phases-labels">
+      <span class="dd-diverge-tag">← Problem space</span>
+      <span class="dd-diverge-tag">Solution space →</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════
+       DIAMOND 1 — DISCOVER
+  ═══════════════════════════════════ -->
+
+  <div class="cs-section">
+    <div class="cs-section-header">
+      <span class="cs-section-num">01</span>
+      <h2>Discover</h2>
+      <div class="cs-divider"></div>
+    </div>
+    <div class="dd-active-pill discover">
+      <span class="dot"></span>
+      Diamond 1 · Diverge — Exploring the problem space
+    </div>
+    <p class="cs-body">The discovery phase opens wide — gathering evidence, observing behaviour, and refusing to assume the problem is what it first appears to be. For this case study, discovery spanned 20 years of lived observation across control rooms, home offices, and mobile workspaces.</p>
+  </div>
+
+  <div class="cs-section">
+    <div class="cs-section-header">
+      <span class="cs-section-num">02</span>
+      <h2>The observation</h2>
+      <div class="cs-divider"></div>
+    </div>
+    <p class="cs-body">Screens are light sources. Paper is a light reflector. These are fundamentally different physical objects — yet for decades, every major operating system, productivity suite, and browser defaulted to white backgrounds modeled directly on printed paper.</p>
+    <div class="cs-highlight">"Nobody designs a room where you stare directly into a lightbulb for eight hours a day. Yet that is precisely what a white-background screen demands of you."</div>
+    <p class="cs-body">The result is Computer Vision Syndrome (CVS): a cluster of eye strain, headaches, and visual fatigue experienced by an estimated 50–90% of regular computer users. The cause isn't screens per se — it's the extreme luminance contrast of black text on <span style="font-family: monospace; font-size: 13px;">#FFFFFF</span>, a contrast ratio of 21:1 that no ergonomics standard would ever recommend for sustained reading.</p>
+  </div>
+
+  <div class="cs-section">
+    <div class="cs-section-header">
+      <span class="cs-section-num">03</span>
+      <h2>Who is affected</h2>
+      <div class="cs-divider"></div>
+    </div>
+    <p class="cs-body">Discovery revealed this is not a niche accessibility issue. It is a universal physiological problem that compounds with exposure time — affecting virtually every person who uses a screen-based device.</p>
+    <div class="cs-cards">
+      <div class="cs-card">
+        <span class="cs-card-icon">👁</span>
+        <p class="cs-card-title">General users</p>
+        <p class="cs-card-body">Cumulative eye strain after 4–8 hours. Fatigue masked until end of day.</p>
+      </div>
+      <div class="cs-card">
+        <span class="cs-card-icon">🧠</span>
+        <p class="cs-card-title">Migraine sufferers</p>
+        <p class="cs-card-body">White backgrounds are a documented trigger for photosensitive migraines.</p>
+      </div>
+      <div class="cs-card">
+        <span class="cs-card-icon">🔭</span>
+        <p class="cs-card-title">Astigmatism</p>
+        <p class="cs-card-body">~33% of adults. High contrast makes text "bleed" and shimmer on screen.</p>
+      </div>
+      <div class="cs-card">
+        <span class="cs-card-icon">🌙</span>
+        <p class="cs-card-title">Low-light contexts</p>
+        <p class="cs-card-body">Evening use with white defaults disrupts circadian rhythm and sleep quality.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="cs-section">
+    <div class="cs-section-header">
+      <span class="cs-section-num">04</span>
+      <h2>Historical research</h2>
+      <div class="cs-divider"></div>
+    </div>
+    <p class="cs-body">Discovery traces the root of the problem through history — revealing that white defaults were never an ergonomic decision. They were an onboarding metaphor that hardened into permanent convention before anyone measured the physiological cost.</p>
+    <div class="cs-timeline">
+      <div class="cs-tl-item">
+        <div class="cs-tl-dot"></div>
+        <p class="cs-tl-year">1970s–80s</p>
+        <p class="cs-tl-text">Xerox PARC introduces the desktop metaphor. White canvas borrows from paper to ease public adoption of computing.</p>
+      </div>
+      <div class="cs-tl-item">
+        <div class="cs-tl-dot"></div>
+        <p class="cs-tl-year">1990s–2000s</p>
+        <p class="cs-tl-text">Windows, Office, and all major browsers ship white defaults. The metaphor hardens into unquestioned convention.</p>
+      </div>
+      <div class="cs-tl-item">
+        <div class="cs-tl-dot"></div>
+        <p class="cs-tl-year">1995 — Industrial Parallel</p>
+        <p class="cs-tl-text">High Performance SCADA removes white backgrounds from control room interfaces after incident investigations link screen fatigue to operator error. Consumer software ignores this finding entirely.</p>
+      </div>
+      <div class="cs-tl-item">
+        <div class="cs-tl-dot"></div>
+        <p class="cs-tl-year">2010s</p>
+        <p class="cs-tl-text">Flat design doubles down on pure white. CVS research accumulates in peer-reviewed literature. Products continue to ignore it.</p>
+      </div>
+      <div class="cs-tl-item">
+        <div class="cs-tl-dot"></div>
+        <p class="cs-tl-year">2018</p>
+        <p class="cs-tl-text">macOS Mojave ships system-wide dark mode — 40+ years after the GUI was invented. Still an opt-in. Default unchanged.</p>
+      </div>
+      <div class="cs-tl-item">
+        <div class="cs-tl-dot"></div>
+        <p class="cs-tl-year">2025–26</p>
+        <p class="cs-tl-text">Dark mode widely available across all platforms. White still the default. The problem persists for the 80% of users who never change settings.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="cs-section">
+    <div class="cs-section-header">
+      <span class="cs-section-num">05</span>
+      <h2>Scale of impact</h2>
+      <div class="cs-divider"></div>
+    </div>
+    <div class="cs-impact-grid">
+      <div class="cs-impact-cell">
+        <span class="cs-impact-num">50–90%</span>
+        <p class="cs-impact-desc">of knowledge workers experience CVS symptoms regularly</p>
+      </div>
+      <div class="cs-impact-cell">
+        <span class="cs-impact-num">21:1</span>
+        <p class="cs-impact-desc">contrast ratio of black on white — maximum possible, never ergonomic</p>
+      </div>
+      <div class="cs-impact-cell">
+        <span class="cs-impact-num">~8hrs</span>
+        <p class="cs-impact-desc">average daily screen exposure per working adult globally</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════
+       DIAMOND 1 — DEFINE
+  ═══════════════════════════════════ -->
+
+  <div class="cs-section">
+    <div class="cs-section-header">
+      <span class="cs-section-num">06</span>
+      <h2>Define</h2>
+      <div class="cs-divider"></div>
+    </div>
+    <div class="dd-active-pill define">
+      <span class="dot"></span>
+      Diamond 1 · Converge — Framing the right problem
+    </div>
+    <p class="cs-body">The define phase converges all discovery into a precise problem statement. The key discipline here is resisting the temptation to jump to solutions — and instead asking: what is the actual root problem we are solving?</p>
+  </div>
+
+  <div class="cs-section">
+    <div class="cs-section-header">
+      <span class="cs-section-num">07</span>
+      <h2>Key insights</h2>
+      <div class="cs-divider"></div>
+    </div>
+    <p class="cs-body">Four core insights emerged from synthesising the discovery research — each one pointing to a different dimension of why this problem has persisted unaddressed.</p>
+    <div class="cs-insight-stack">
+      <div class="cs-insight-card">
+        <span class="cs-insight-num">I·01</span>
+        <div class="cs-insight-body">
+          <p class="cs-insight-title">Defaults are the product</p>
+          <p class="cs-insight-desc">If 80% of users never change settings, the default IS the user experience. The burden must never be on the user to fix a physiological problem caused by poor design choices.</p>
+        </div>
+      </div>
+      <div class="cs-insight-card">
+        <span class="cs-insight-num">I·02</span>
+        <div class="cs-insight-body">
+          <p class="cs-insight-title">Normalisation masks the harm</p>
+          <p class="cs-insight-desc">Users have adapted to eye strain so completely they no longer connect it to screen defaults. The pain is real but its source is invisible — making it the most dangerous kind of UX failure.</p>
+        </div>
+      </div>
+      <div class="cs-insight-card">
+        <span class="cs-insight-num">I·03</span>
+        <div class="cs-insight-body">
+          <p class="cs-insight-title">Industrial design already solved this</p>
+          <p class="cs-insight-desc">High Performance SCADA eliminated white-dominant interfaces from control rooms in the 1990s after operator fatigue contributed to industrial incidents. Consumer software has simply never read those findings.</p>
+        </div>
+      </div>
+      <div class="cs-insight-card">
+        <span class="cs-insight-num">I·04</span>
+        <div class="cs-insight-body">
+          <p class="cs-insight-title">Dark mode solves the wrong problem</p>
+          <p class="cs-insight-desc">The industry responded with dark mode — which trades one visual extreme for another and forces constant eye adaptation between ambient and near-black. A middle path was never seriously explored.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cs-section">
+    <div class="cs-section-header">
+      <span class="cs-section-num">08</span>
+      <h2">How Might We</h2>
+      <div class="cs-divider"></div>
+    </div>
+    <p class="cs-body">The insights were reframed as HMW questions — a standard Define-phase tool that translates problems into open design opportunities without prescribing solutions.</p>
+    <div class="cs-hmw-grid">
+      <div class="cs-hmw-card">
+        <span class="cs-hmw-label">HMW 01</span>
+        <p class="cs-hmw-text">How might we make the default screen experience physiologically comfortable — without requiring any user action?</p>
+      </div>
+      <div class="cs-hmw-card">
+        <span class="cs-hmw-label">HMW 02</span>
+        <p class="cs-hmw-text">How might we reduce contrast without sacrificing readability or accessibility compliance?</p>
+      </div>
+      <div class="cs-hmw-card">
+        <span class="cs-hmw-label">HMW 03</span>
+        <p class="cs-hmw-text">How might we apply 30 years of industrial human factors research to consumer software defaults?</p>
+      </div>
+      <div class="cs-hmw-card">
+        <span class="cs-hmw-label">HMW 04</span>
+        <p class="cs-hmw-text">How might we shift the design industry's testing model from 30-minute sessions to sustained 8-hour exposure measurement?</p>
+      </div>
+    </div>
+
+    <div class="cs-highlight">Problem statement: The computing industry has normalised a physiologically harmful default — pure white screen backgrounds — that affects 1.4+ billion users daily. The harm is cumulative, invisible, and entirely preventable through a single design decision that has never been made.</div>
+  </div>
+
+  <!-- ═══════════════════════════════════
+       DIAMOND 2 — DEVELOP
+  ═══════════════════════════════════ -->
+
+  <div class="cs-section">
+    <div class="cs-section-header">
+      <span class="cs-section-num">09</span>
+      <h2>Develop</h2>
+      <div class="cs-divider"></div>
+    </div>
+    <div class="dd-active-pill develop">
+      <span class="dot"></span>
+      Diamond 2 · Diverge — Exploring the solution space
+    </div>
+    <p class="cs-body">The develop phase opens wide again — this time into the solution space. Multiple directions were explored, evaluated, and stress-tested against the defined problem statement. Not all ideas survived.</p>
+  </div>
+
+  <div class="cs-section">
+    <div class="cs-section-header">
+      <span class="cs-section-num">10</span>
+      <h2>Ideation — concepts explored</h2>
+      <div class="cs-divider"></div>
+    </div>
+    <p class="cs-body">Four design directions were considered. Each was evaluated against the core insight: the solution must work as a default — not as a user preference requiring discovery.</p>
+    <div class="cs-idea-grid">
+      <div class="cs-idea-card">
+        <span class="cs-idea-status rejected">✕ Rejected</span>
+        <p class="cs-idea-title">System-wide dark mode</p>
+        <p class="cs-idea-reason">Trades one extreme for another. Forces eye adaptation between ambient light and near-black surfaces. Does not address the root contrast problem.</p>
+      </div>
+      <div class="cs-idea-card">
+        <span class="cs-idea-status rejected">✕ Rejected</span>
+        <p class="cs-idea-title">Blue light filter toggle</p>
+        <p class="cs-idea-reason">Addresses wavelength, not luminance. Buried in settings — still requires user action. Misdiagnoses the problem as colour temperature rather than contrast ratio.</p>
+      </div>
+      <div class="cs-idea-card">
+        <span class="cs-idea-status partial">◑ Partial</span>
+        <p class="cs-idea-title">Automatic brightness adjustment</p>
+        <p class="cs-idea-reason">Reduces overall luminance but preserves the 21:1 contrast ratio problem. Addresses glare without addressing the relative contrast between text and background.</p>
+      </div>
+      <div class="cs-idea-card">
+        <span class="cs-idea-status pursued">✓ Pursued</span>
+        <p class="cs-idea-title">Warm low-luminance default</p>
+        <p class="cs-idea-reason">Addresses the root cause — contrast ratio between text and background. Ships as the default. Requires zero user action. Backed by industrial precedent.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="cs-section">
+    <div class="cs-section-header">
+      <span class="cs-section-num">11</span>
+      <h2">Precedent analysis</h2>
+      <div class="cs-divider"></div>
+    </div>
+    <p class="cs-body">Strong design decisions borrow from proven models. The develop phase systematically identified existing products and disciplines that had already solved variations of this problem.</p>
+    <table class="cs-precedent">
+      <thead>
+        <tr>
+          <th>Precedent</th>
+          <th>What they solved</th>
+          <th>Transferable principle</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Kindle / E-ink</td>
+          <td>Warm reflective surface — zero reported eye strain for extended reading</td>
+          <td>Warm off-white as the comfortable reading default</td>
+        </tr>
+        <tr>
+          <td>HP SCADA (1990s)</td>
+          <td>Removed white/bright from control rooms — operator fatigue reduced, incident rates improved</td>
+          <td>Industrial proof that muted backgrounds improve sustained performance</td>
+        </tr>
+        <tr>
+          <td>iA Writer</td>
+          <td>Off-white canvas by default — writers cite reduced fatigue over Word/Docs</td>
+          <td>A writing tool can ship a better default and users prefer it</td>
+        </tr>
+        <tr>
+          <td>Instapaper / Readwise</td>
+          <td>Sepia reading mode — users overwhelmingly prefer it for long-form reading</td>
+          <td>Warm tones as a preference signal at population scale</td>
+        </tr>
+        <tr>
+          <td>WCAG Accessibility</td>
+          <td>Minimum 4.5:1 contrast for readability</td>
+          <td>9:1 warm contrast comfortably exceeds accessibility while reducing fatigue</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ═══════════════════════════════════
+       DIAMOND 2 — DELIVER
+  ═══════════════════════════════════ -->
+
+  <div class="cs-section">
+    <div class="cs-section-header">
+      <span class="cs-section-num">12</span>
+      <h2>Deliver</h2>
+      <div class="cs-divider"></div>
+    </div>
+    <div class="dd-active-pill deliver">
+      <span class="dot"></span>
+      Diamond 2 · Converge — The resolved solution
+    </div>
+    <p class="cs-body">The deliver phase converges on the resolved, testable solution — specific enough to implement, validated against the problem statement, and measurable against defined success metrics.</p>
+  </div>
+
+  <div class="cs-section">
+    <div class="cs-section-header">
+      <span class="cs-section-num">13</span>
+      <h2>The solution</h2>
+      <div class="cs-divider"></div>
+    </div>
+    <p class="cs-body">The fix is not dark mode. The fix is a warm, low-luminance Comfort Default — a third canonical mode between blinding white and near-black dark mode. It mirrors aged paper and e-ink: surfaces humans have read comfortably for centuries.</p>
+
+    <div class="cs-swatch-row">
+      <div>
+        <p class="cs-swatch-label">Current default</p>
+        <div class="cs-swatch">
+          <div class="cs-swatch-color" style="background: #FFFFFF; border-bottom: 0.5px solid #E0E0E0;"></div>
+          <div class="cs-swatch-info">
+            <p class="cs-swatch-name">Pure white</p>
+            <p class="cs-swatch-hex">#FFFFFF</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p class="cs-swatch-label">Comfort default</p>
+        <div class="cs-swatch">
+          <div class="cs-swatch-color" style="background: #F5F0E8;"></div>
+          <div class="cs-swatch-info">
+            <p class="cs-swatch-name">Warm off-white</p>
+            <p class="cs-swatch-hex">#F5F0E8</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p class="cs-swatch-label">Long-read variant</p>
+        <div class="cs-swatch">
+          <div class="cs-swatch-color" style="background: #E8E0D0;"></div>
+          <div class="cs-swatch-info">
+            <p class="cs-swatch-name">Aged paper</p>
+            <p class="cs-swatch-hex">#E8E0D0</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cs-contrast-bar" style="margin-top: 1rem;">
+      <div class="cs-contrast-fill" style="width: 100%; background: #D44;"></div>
+    </div>
+    <div class="cs-contrast-label">
+      <span>#000 on #FFF — 21:1 contrast ratio (extreme, harmful)</span>
+    </div>
+    <div class="cs-contrast-bar">
+      <div class="cs-contrast-fill" style="width: 48%; background: #4A9;"></div>
+    </div>
+    <div class="cs-contrast-label">
+      <span>#3A2A1A on #F5F0E8 — ~9:1 ratio (WCAG AA+ compliant, comfortable)</span>
+    </div>
+
+    <div class="cs-solution-panel" style="margin-top: 1.25rem;">
+      <h3>Systemic recommendations</h3>
+      <div class="cs-sol-row"><div class="cs-sol-dot"></div><span>Ship warm off-white (<span style="font-family: monospace; font-size: 12px;">#F5F0E8</span>) as the OS-level default canvas — zero user action required</span></div>
+      <div class="cs-sol-row"><div class="cs-sol-dot"></div><span>Reduce default luminance contrast target from 21:1 to 7:1–10:1 for body text in all productivity applications</span></div>
+      <div class="cs-sol-row"><div class="cs-sol-dot"></div><span>Mandate 8-hour longitudinal eye strain testing in UX research protocols — not 30-minute usability sessions</span></div>
+      <div class="cs-sol-row"><div class="cs-sol-dot"></div><span>Treat Comfort Mode as the canonical default — make pure white the opt-in for users who specifically require it</span></div>
+      <div class="cs-sol-row"><div class="cs-sol-dot"></div><span>Embed warm-mode controls in primary OS accessibility surfaces — visible, not buried</span></div>
+    </div>
+  </div>
+
+  <div class="cs-section">
+    <div class="cs-section-header">
+      <span class="cs-section-num">14</span>
+      <h2>Proposed success metrics</h2>
+      <div class="cs-divider"></div>
+    </div>
+    <p class="cs-body">The Double Diamond is only complete when the solution is measurable. These are the metrics that would validate the Comfort Default at scale — to be tested in a controlled study with longitudinal exposure.</p>
+    <div class="cs-outcome-grid">
+      <div class="cs-outcome-card">
+        <span class="cs-outcome-metric">↓40%</span>
+        <p class="cs-outcome-label">Reported eye strain after 8-hour session vs white default</p>
+      </div>
+      <div class="cs-outcome-card">
+        <span class="cs-outcome-metric">↓25%</span>
+        <p class="cs-outcome-label">Headache incidence in regular screen users over 30 days</p>
+      </div>
+      <div class="cs-outcome-card">
+        <span class="cs-outcome-metric">9:1</span>
+        <p class="cs-outcome-label">Target contrast ratio — WCAG AA+ compliant and ergonomically comfortable</p>
+      </div>
+      <div class="cs-outcome-card">
+        <span class="cs-outcome-metric">0</span>
+        <p class="cs-outcome-label">User actions required — comfort must be the default, not the discovery</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="cs-section">
+    <div class="cs-section-header">
+      <span class="cs-section-num">15</span>
+      <h2>What this case study demonstrates</h2>
+      <div class="cs-divider"></div>
+    </div>
+    <p class="cs-body">The Double Diamond reveals something important about this problem that a simple problem-solution format would miss: the real failure happened in the Define phase — not the Deliver phase.</p>
+    <div class="cs-insight-stack">
+      <div class="cs-insight-card">
+        <span class="cs-insight-num">★</span>
+        <div class="cs-insight-body">
+          <p class="cs-insight-title">The industry skipped Discovery entirely</p>
+          <p class="cs-insight-desc">White backgrounds were never the result of a design process. They were copied from paper before anyone asked whether screens and paper were the same kind of surface. They are not.</p>
+        </div>
+      </div>
+      <div class="cs-insight-card">
+        <span class="cs-insight-num">★</span>
+        <div class="cs-insight-body">
+          <p class="cs-insight-title">The Define phase was never completed</p>
+          <p class="cs-insight-desc">Without a clear problem statement — "white defaults cause cumulative physiological harm" — no solution was ever framed. Dark mode arrived as a feature, not as an answer to a defined problem.</p>
+        </div>
+      </div>
+      <div class="cs-insight-card">
+        <span class="cs-insight-num">★</span>
+        <div class="cs-insight-body">
+          <p class="cs-insight-title">Post-market surveillance is the missing discipline</p>
+          <p class="cs-insight-desc">The Double Diamond assumes research informs design. But for screen defaults, no one measured what happened to real users over months and years of daily exposure. That measurement gap is the root of the entire problem.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLOSING -->
+  <div class="cs-closing">
+    <p class="cs-closing-quote">"The greatest UX failures are not the ones people complain about. They are the ones people have accepted as normal."</p>
+    <p class="cs-closing-author">— Srinivas CV · Human Factors Advocate · 20 Years Safety-Critical HMI Design</p>
+  </div>
+
+</div>

@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Srinivas CV — Portfolio Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:#E8E4DC;
+  min-height:100vh;
+}
+
+/* ── HERO ── */
+.hero{
+  background:#0a1f16;
+  padding:48px 48px 40px;
+  position:relative;
+  overflow:hidden;
+}
+.hero::after{
+  content:'';
+  position:absolute;
+  bottom:0;left:0;right:0;
+  height:2px;
+  background:linear-gradient(90deg,#1D9E75 0%,transparent 65%);
+}
+.hero-inner{
+  max-width:1100px;margin:0 auto;
+  display:flex;justify-content:space-between;
+  align-items:flex-end;flex-wrap:wrap;gap:24px;
+}
+.hero-left{}
+.hero-eyebrow{
+  font-size:10px;font-weight:600;
+  letter-spacing:2.5px;text-transform:uppercase;
+  color:#5DCAA5;margin-bottom:10px;
+}
+.hero-name{
+  font-family:'DM Serif Display',serif;
+  font-size:44px;color:#F0EDE6;
+  line-height:1;margin-bottom:6px;
+}
+.hero-role{
+  font-size:13px;font-weight:300;
+  color:rgba(159,225,203,.65);
+  letter-spacing:.5px;
+}
+.hero-right{
+  display:flex;flex-direction:column;
+  align-items:flex-end;gap:8px;
+}
+.hero-stat{
+  font-size:11px;color:rgba(240,237,230,.4);
+  letter-spacing:.3px;text-align:right;
+}
+.hero-stat strong{
+  color:#9FE1CB;font-weight:500;
+  font-size:13px;display:block;
+}
+
+/* ── LAYOUT ── */
+.layout{
+  max-width:1100px;margin:0 auto;
+  display:grid;
+  grid-template-columns:220px 1fr;
+  gap:0;
+  min-height:calc(100vh - 160px);
+}
+
+/* ── TAB SIDEBAR ── */
+.tabs{
+  background:#F0EDE6;
+  border-right:1px solid #D4D1C8;
+  padding:24px 0;
+}
+.tab-group-label{
+  font-size:9px;font-weight:600;
+  letter-spacing:2px;text-transform:uppercase;
+  color:#aaa8a0;padding:0 20px 8px;
+  margin-top:16px;
+}
+.tab-group-label:first-child{margin-top:0;}
+.tab{
+  display:flex;align-items:center;
+  gap:10px;padding:11px 20px;
+  cursor:pointer;
+  border-left:3px solid transparent;
+  transition:all .18s;
+  position:relative;
+}
+.tab:hover{background:#E8E5DE;}
+.tab.active{
+  background:#fff;
+  border-left-color:var(--tc);
+}
+.tab-num{
+  font-family:'DM Mono',monospace;
+  font-size:10px;font-weight:500;
+  color:#ccc;min-width:18px;
+}
+.tab.active .tab-num{color:var(--tc);}
+.tab-icon{font-size:14px;flex-shrink:0;}
+.tab-name{
+  font-size:12px;font-weight:500;
+  color:#5a5855;line-height:1.3;
+}
+.tab.active .tab-name{color:#1a1917;}
+
+/* ── CONTENT PANEL ── */
+.panel-wrap{
+  background:#FDFBF8;
+  padding:40px 44px 60px;
+  overflow-y:auto;
+}
+.panel{display:none;}
+.panel.active{display:block;}
+
+/* panel hero bar */
+.panel-header{
+  display:flex;align-items:flex-start;
+  gap:16px;margin-bottom:32px;
+  padding-bottom:20px;
+  border-bottom:1px solid #E8E5DE;
+}
+.panel-icon-big{
+  width:48px;height:48px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;flex-shrink:0;
+  background:var(--tc-bg);
+}
+.panel-title{
+  font-family:'DM Serif Display',serif;
+  font-size:28px;font-weight:400;
+  color:#1a1917;margin-bottom:4px;
+  line-height:1.15;
+}
+.panel-sub{
+  font-size:13px;color:#7a7870;font-weight:300;
+}
+
+/* content blocks */
+.block{margin-bottom:28px;}
+.block-label{
+  font-size:9px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;
+  color:var(--tc);margin-bottom:10px;
+  display:block;
+}
+.block-body{
+  font-size:14px;line-height:1.8;
+  color:#4a4845;
+}
+
+/* cards grid */
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:12px;margin-top:8px;
+}
+.card{
+  background:#fff;
+  border:1px solid #E8E5DE;
+  border-radius:8px;
+  padding:16px 16px;
+  border-top:3px solid var(--tc);
+}
+.card-title{
+  font-size:13px;font-weight:600;
+  color:#1a1917;margin-bottom:5px;
+}
+.card-body{
+  font-size:12px;color:#6b6860;
+  line-height:1.6;
+}
+
+/* project list */
+.proj-list{display:flex;flex-direction:column;gap:10px;}
+.proj-item{
+  display:flex;align-items:flex-start;gap:12px;
+  background:#fff;border:1px solid #E8E5DE;
+  border-radius:8px;padding:14px 16px;
+}
+.proj-num{
+  font-family:'DM Mono',monospace;
+  font-size:11px;font-weight:500;
+  color:var(--tc);min-width:24px;
+  padding-top:2px;
+}
+.proj-title{
+  font-size:13px;font-weight:600;
+  color:#1a1917;margin-bottom:3px;
+}
+.proj-desc{
+  font-size:12px;color:#6b6860;
+  line-height:1.55;margin:0;
+}
+
+/* quote block */
+.quote{
+  background:#F5F0E8;
+  border-left:4px solid var(--tc);
+  border-radius:0 8px 8px 0;
+  padding:16px 20px;
+  font-style:italic;
+  font-size:15px;
+  color:#2C1810;
+  line-height:1.75;
+  margin:16px 0;
+}
+
+/* pill tags */
+.pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.pill{
+  font-size:10px;font-weight:500;
+  letter-spacing:.8px;text-transform:uppercase;
+  color:var(--tc);
+  background:var(--tc-bg);
+  border:1px solid var(--tc-bd);
+  border-radius:20px;padding:3px 10px;
+}
+
+/* timeline */
+.timeline{padding-left:20px;border-left:1px solid #E8E5DE;margin-top:8px;}
+.tl-item{position:relative;margin-bottom:16px;}
+.tl-item::before{
+  content:'';position:absolute;
+  left:-24px;top:5px;
+  width:7px;height:7px;border-radius:50%;
+  background:var(--tc);
+}
+.tl-title{font-size:13px;font-weight:600;color:#1a1917;margin-bottom:2px;}
+.tl-body{font-size:12px;color:#6b6860;line-height:1.6;}
+
+/* stat row */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-top:8px;}
+.stat{
+  background:#fff;border:1px solid #E8E5DE;
+  border-radius:8px;padding:16px;text-align:center;
+}
+.stat-num{
+  font-family:'DM Serif Display',serif;
+  font-size:28px;color:var(--tc);
+  display:block;margin-bottom:4px;
+}
+.stat-lbl{font-size:11px;color:#7a7870;line-height:1.4;}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-eyebrow">Portfolio Hub · Everything in one place</div>
+      <div class="hero-name">Srinivas CV</div>
+      <div class="hero-role">Human Factors Advocate &nbsp;·&nbsp; UX Designer &nbsp;·&nbsp; 20 Years Safety-Critical HMI</div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-stat"><strong>9</strong>Categories</div>
+      <div class="hero-stat"><strong>10</strong>Projects</div>
+      <div class="hero-stat"><strong>20 yrs</strong>Experience</div>
+    </div>
+  </div>
+</div>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- TABS -->
+  <nav class="tabs">
+
+    <div class="tab-group-label">Thinking</div>
+
+    <div class="tab active" data-tab="t1" style="--tc:#1D9E75;" onclick="show('t1',this)">
+      <span class="tab-num">01</span>
+      <span class="tab-icon">💡</span>
+      <span class="tab-name">UX Philosophy</span>
+    </div>
+    <div class="tab" data-tab="t8" style="--tc:#378ADD;" onclick="show('t8',this)">
+      <span class="tab-num">02</span>
+      <span class="tab-icon">📊</span>
+      <span class="tab-name">Market Reality</span>
+    </div>
+
+    <div class="tab-group-label">Work</div>
+
+    <div class="tab" data-tab="t3" style="--tc:#E8A84A;" onclick="show('t3',this)">
+      <span class="tab-num">03</span>
+      <span class="tab-icon">🗂</span>
+      <span class="tab-name">Portfolio Projects</span>
+    </div>
+    <div class="tab" data-tab="t7" style="--tc:#9B6FD4;" onclick="show('t7',this)">
+      <span class="tab-num">04</span>
+      <span class="tab-icon">📐</span>
+      <span class="tab-name">Case Studies</span>
+    </div>
+    <div class="tab" data-tab="t4" style="--tc:#E24B4A;" onclick="show('t4',this)">
+      <span class="tab-num">05</span>
+      <span class="tab-icon">🏍</span>
+      <span class="tab-name">Ather Approach</span>
+    </div>
+
+    <div class="tab-group-label">Career</div>
+
+    <div class="tab" data-tab="t2" style="--tc:#0F6E56;" onclick="show('t2',this)">
+      <span class="tab-num">06</span>
+      <span class="tab-icon">🧭</span>
+      <span class="tab-name">Career Strategy</span>
+    </div>
+    <div class="tab" data-tab="t6" style="--tc:#BA7517;" onclick="show('t6',this)">
+      <span class="tab-num">07</span>
+      <span class="tab-icon">📄</span>
+      <span class="tab-name">Resume & Branding</span>
+    </div>
+    <div class="tab" data-tab="t5" style="--tc:#D44A7A;" onclick="show('t5',this)">
+      <span class="tab-num">08</span>
+      <span class="tab-icon">🎯</span>
+      <span class="tab-name">Interview Prep</span>
+    </div>
+
+    <div class="tab-group-label">Story</div>
+
+    <div class="tab" data-tab="t9" style="--tc:#5DCAA5;" onclick="show('t9',this)">
+      <span class="tab-num">09</span>
+      <span class="tab-icon">🎨</span>
+      <span class="tab-name">Personal Story</span>
+    </div>
+
+  </nav>
+
+  <!-- CONTENT PANELS -->
+  <div class="panel-wrap">
+
+    <!-- 01 UX PHILOSOPHY -->
+    <div class="panel active" id="t1" style="--tc:#1D9E75;--tc-bg:rgba(29,158,117,.07);--tc-bd:rgba(29,158,117,.2);">
+      <div class="panel-header">
+        <div class="panel-icon-big">💡</div>
+        <div>
+          <div class="panel-title">UX Philosophy & Ideology</div>
+          <div class="panel-sub">The thinking that drives all the work</div>
+        </div>
+      </div>
+
+      <div class="block">
+        <span class="block-label">Core Belief</span>
+        <div class="quote">"The greatest UX failures are not the ones people complain about. They are the ones people have accepted as normal."</div>
+      </div>
+
+      <div class="block">
+        <span class="block-label">The Central Argument</span>
+        <div class="block-body">Most design solves for what people want. This work solves for what people silently endure. The computing industry, the automotive industry, and the software industry have all normalised physiological harm — eye strain, blind riding moments, cognitive overload — because nobody measured what happened after launch.</div>
+      </div>
+
+      <div class="block">
+        <span class="block-label">The Three Questions Behind Every Project</span>
+        <div class="cards">
+          <div class="card">
+            <div class="card-title">Question 1</div>
+            <div class="card-body">What does the user's body experience during sustained real-world use — not in a 30-minute lab test?</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Question 2</div>
+            <div class="card-body">What has the user normalised that they should never have had to accept?</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Question 3</div>
+            <div class="card-body">What would genuinely remove that normalised suffering — not as a toggle, but as the right default from day one?</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <span class="block-label">Post-Market UX Surveillance</span>
+        <div class="block-body">The discipline of measuring what products do to human beings after 6 months of daily use. Not in a lab. In real life. Over years. This is the missing discipline in consumer product design — and the thread that connects every project in this portfolio.</div>
+      </div>
+
+      <div class="block">
+        <span class="block-label">The Philosophy in One Line</span>
+        <div class="quote">"I don't serve to deserve something in return. I wish to work where everyone deserves the best."</div>
+      </div>
+
+      <div class="block">
+        <span class="block-label">Key Principles</span>
+        <div class="pills">
+          <span class="pill">Defaults are the product</span>
+          <span class="pill">Normalisation masks harm</span>
+          <span class="pill">Industrial precedent ignored</span>
+          <span class="pill">Post-market surveillance missing</span>
+          <span class="pill">Design for the human not the demo</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 02 MARKET REALITY -->
+    <div class="panel" id="t8" style="--tc:#378ADD;--tc-bg:rgba(55,138,221,.07);--tc-bd:rgba(55,138,221,.2);">
+      <div class="panel-header">
+        <div class="panel-icon-big">📊</div>
+        <div>
+          <div class="panel-title">Market Reality 2026</div>
+          <div class="panel-sub">Honest picture of UX jobs, AI impact, and where opportunity lives</div>
+        </div>
+      </div>
+
+      <div class="block">
+        <span class="block-label">The Honest Global Picture</span>
+        <div class="block-body">UX has been hit. Generalist junior roles contracted significantly in 2023–24. AI commoditised wireframes and UI artifacts. Many bootcamp graduates cannot find work. The market is harder than 2021 — and stabilising now in 2026.</div>
+      </div>
+
+      <div class="block">
+        <span class="block-label">Who Gets Laid Off vs Who Gets Hired</span>
+        <div class="cards">
+          <div class="card" style="border-top-color:#E24B4A;">
+            <div class="card-title">Getting laid off</div>
+            <div class="card-body">Junior artifact-makers. Generalists with no domain depth. Designers who produced deliverables but couldn't explain business impact.</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Getting hired</div>
+            <div class="card-body">Senior specialists. Domain experts. Designers who reduce chaos, show judgment, and can be trusted with ambiguity.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <span class="block-label">India Specifically</span>
+        <div class="stats">
+          <div class="stat">
+            <span class="stat-num">4:1</span>
+            <div class="stat-lbl">Developer to designer ratio gap in India</div>
+          </div>
+          <div class="stat">
+            <span class="stat-num">↑</span>
+            <div class="stat-lbl">Industrial & automotive UX demand growing</div>
+          </div>
+          <div class="stat">
+            <span class="stat-num">Low</span>
+            <div class="stat-lbl">Layoff risk for safety-critical domain specialists</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <span class="block-label">AI's Real Impact on This Profile</span>
+        <div class="block-body">AI replaced the junior artifact-maker. It cannot replace the senior problem-finder. Post-Market UX Surveillance, human factors for safety-critical systems, and cross-domain insight from 20 years of industrial design — none of these can be generated by AI. Judgment is the scarce resource. Judgment is what this portfolio demonstrates.</div>
+      </div>
+
+      <div class="block">
+        <span class="block-label">The Verdict</span>
+        <div class="quote">"For most people entering UX right now — timing is difficult. For this specific profile — this is exactly the right moment. The window is open now."</div>
+      </div>
+    </div>
+
+    <!-- 03 PORTFOLIO PROJECTS -->
+    <div class="panel" id="t3" style="--tc:#E8A84A;--tc-bg:rgba(232,168,74,.07);--tc-bd:rgba(232,168,74,.2);">
+      <div class="panel-header">
+        <div class="panel-icon-big">🗂</div>
+        <div>
+          <div class="panel-title">Portfolio Projects</div>
+          <div class="panel-sub">10 concepts — each one finding what a product silently does to people</div>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="proj-list">
+          <div class="proj-item">
+            <span class="proj-num">01</span>
+            <div>
+              <div class="proj-title">The Cogni-Focus</div>
+              <p class="proj-desc">Ambient safety dashboard reducing two-wheeler eyes-off-road time from 2.0s to 0.5s through peripheral colour intelligence. Published on Medium.</p>
+            </div>
+          </div>
+          <div class="proj-item">
+            <span class="proj-num">02</span>
+            <div>
+              <div class="proj-title">Advanced Cobra Hood — CH-01</div>
+              <p class="proj-desc">Cobra-shaped instrument cluster hood positioning the display at rider natural eyeline with zero head tilt. Concept proposal for Ather Energy.</p>
+            </div>
+          </div>
+          <div class="proj-item">
+            <span class="proj-num">03</span>
+            <div>
+              <div class="proj-title">Windows White Background — The Silent Needle</div>
+              <p class="proj-desc">How default white luminance silently harms 1.4 billion users every working day. High Performance SCADA solved this 30 years ago.</p>
+            </div>
+          </div>
+          <div class="proj-item">
+            <span class="proj-num">04</span>
+            <div>
+              <div class="proj-title">Enhanced Focus Mode — Mobile OS</div>
+              <p class="proj-desc">Simplified smartphone interface making digital access possible for elderly, first-time, and accessibility-dependent users. Published on Medium.</p>
+            </div>
+          </div>
+          <div class="proj-item">
+            <span class="proj-num">05</span>
+            <div>
+              <div class="proj-title">Bosch ADAS Alert Hierarchy</div>
+              <p class="proj-desc">Applying industrial ISA-18.2 alarm management principles to automotive ADAS alert design to prevent cognitive overload in safety-critical situations.</p>
+            </div>
+          </div>
+          <div class="proj-item">
+            <span class="proj-num">06</span>
+            <div>
+              <div class="proj-title">Adobe PDF Eye Strain</div>
+              <p class="proj-desc">How white background defaults in document reading cause cumulative fatigue that hundreds of millions of users have normalised and stopped complaining about.</p>
+            </div>
+          </div>
+          <div class="proj-item">
+            <span class="proj-num">07</span>
+            <div>
+              <div class="proj-title">Bike Navigation — 60 Meters Blind</div>
+              <p class="proj-desc">Why every two-wheeler navigation check creates a blind moment at speed and what glanceable ambient navigation for Indian riders looks like.</p>
+            </div>
+          </div>
+          <div class="proj-item">
+            <span class="proj-num">08</span>
+            <div>
+              <div class="proj-title">Public Speed Beacon</div>
+              <p class="proj-desc">A first-of-kind external light on the vehicle fairing broadcasting speed state to pedestrians and road users — not just the rider.</p>
+            </div>
+          </div>
+          <div class="proj-item">
+            <span class="proj-num">09</span>
+            <div>
+              <div class="proj-title">Smart Camera Mirror Pods</div>
+              <p class="proj-desc">Camera pods replacing physical mirrors integrated into the Cobra Hood for wider field of view, zero vibration blur, and flush aesthetic.</p>
+            </div>
+          </div>
+          <div class="proj-item">
+            <span class="proj-num">10</span>
+            <div>
+              <div class="proj-title">Post-Market UX Surveillance Framework</div>
+              <p class="proj-desc">The overarching diagnostic lens measuring what products silently do to human beings after sustained real-world use — the thread connecting all projects.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 04 CASE STUDIES -->
+    <div class="panel" id="t7" style="--tc:#9B6FD4;--tc-bg:rgba(155,111,212,.07);--tc-bd:rgba(155,111,212,.2);">
+      <div class="panel-header">
+        <div class="panel-icon-big">📐</div>
+        <div>
+          <div class="panel-title">Case Studies</div>
+          <div class="panel-sub">Double Diamond methodology applied to the two core concepts</div>
+        </div>
+      </div>
+
+      <div class="block">
+        <span class="block-label">Methodology — Double Diamond</span>
+        <div class="block-body">Every case study follows the Double Diamond framework — Discover, Define, Develop, Deliver. Not as decoration. As the structural backbone that reveals why the problem persisted unsolved, how the right question was framed, what solutions were rejected, and what measurable success looks like.</div>
+      </div>
+
+      <div class="block">
+        <span class="block-label">Case Study 1</span>
+        <div class="card">
+          <div class="card-title">Windows White Background — The Silent Needle</div>
+          <div class="card-body">Discover: 50-year historical research, CVS statistics, 1.4B users affected. Define: 4 insights + HMW questions + problem statement. Develop: 4 ideation directions with rejected options, precedent analysis. Deliver: Warm off-white default #F5F0E8, contrast ratio reduction, systemic recommendations.</div>
+        </div>
+      </div>
+
+      <div class="block">
+        <span class="block-label">Case Study 2</span>
+        <div class="card">
+          <div class="card-title">Cogni Hood CH-01 — Integrated Desert Visibility Console</div>
+          <div class="card-body">Discover: 20 years lived observation, blind moment quantified, 4 affected groups including pedestrians. Define: Root cause = position not navigation, HMW questions, problem statement. Develop: 6 directions including 4 rejected, precedent from aviation/SCADA/automotive. Deliver: 4 integrated innovations, validation metrics, measurable impact.</div>
+        </div>
+      </div>
+
+      <div class="block">
+        <span class="block-label">The Key Insight Both Cases Share</span>
+        <div class="quote">"In both cases, the industry skipped the Discovery phase entirely. The problem was never defined. So the solution was never found. That is what the Double Diamond reveals — and what this portfolio exists to fix."</div>
+      </div>
+    </div>
+
+    <!-- 05 ATHER APPROACH -->
+    <div class="panel" id="t4" style="--tc:#E24B4A;--tc-bg:rgba(226,75,74,.07);--tc-bd:rgba(226,75,74,.2);">
+      <div class="panel-header">
+        <div class="panel-icon-big">🏍</div>
+        <div>
+          <div class="panel-title">Ather Energy Approach</div>
+          <div class="panel-sub">The target company, the evidence, the people, the plan</div>
+        </div>
+      </div>
+
+      <div class="block">
+        <span class="block-label">The Evidence — Ather's Own Video</span>
+        <div class="block-body">Ather's own Rizta promotional video — frame at 0:02 — shows the rider's head bowed completely down to the dashboard while riding in city traffic. Their own marketing material shows the exact problem the Cogni Hood solves. This is not a criticism. It is an opportunity backed by their own evidence.</div>
+      </div>
+
+      <div class="block">
+        <span class="block-label">The Right People — In Order</span>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-title">1st — Harish Kumar · HMI Design Lead</div>
+            <div class="tl-body">linkedin.com/in/harish-kumar-b0926465 &nbsp;·&nbsp; harish@atherenergy.com · M.Des IIT Bombay · Previously Royal Enfield · Your direct counterpart</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-title">2nd — Swagat Rath · Design Manager / Product Owner</div>
+            <div class="tl-body">linkedin.com/in/swagat-rath-61ab9113 &nbsp;·&nbsp; swagat@atherenergy.com · 11+ years at Ather · Speaking at Figma Config 2026</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-title">3rd — Shantanu Jog · Studio Lead Vehicle Design</div>
+            <div class="tl-body">linkedin.com/in/shanjog &nbsp;·&nbsp; Founding designer · Holds the design culture</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-title">4th — Tarun Mehta · Co-Founder & CEO</div>
+            <div class="tl-body">linkedin.com/in/tarunsmehta &nbsp;·&nbsp; Only if the design team doesn't respond in 2 weeks</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <span class="block-label">The Message — Send Today</span>
+        <div class="quote">"Harish — I watched Ather's Rizta connectivity video and paused at the 2-second mark. Your rider. Your dashboard. City traffic. Head bowed completely down. I have been designing against this exact problem for months. The Cogni-Hood CH-01 — display at rider natural eyeline. Zero head bow. Zero blind moment. 15 minutes — would you hear it?"</div>
+      </div>
+
+      <div class="block">
+        <span class="block-label">Physical Address</span>
+        <div class="block-body">Ather Energy · 3rd Floor, Tower D, IBC Knowledge Park · #4/1 Bannerghatta Main Road · Bangalore 560029 · You are in Bangalore. This is a 30 minute drive. Walk in with the concept sheet in a tube.</div>
+      </div>
+    </div>
+
+    <!-- 06 CAREER STRATEGY -->
+    <div class="panel" id="t2" style="--tc:#0F6E56;--tc-bg:rgba(15,110,86,.07);--tc-bd:rgba(15,110,86,.2);">
+      <div class="panel-header">
+        <div class="panel-icon-big">🧭</div>
+        <div>
+          <div class="panel-title">Career Strategy</div>
+          <div class="panel-sub">The Bridge Path — not a leap, a deliberate crossing</div>
+        </div>
+      </div>
+
+      <div class="block">
+        <span class="block-label">The Recommended Path</span>
+        <div class="block-body">Not a direct jump to consumer UX. Not staying in SCADA. The Bridge Strategy — move to a company where SCADA and UX intersect, build formal UX craft from inside, then either grow into full UX or launch the consulting practice from a position of strength.</div>
+      </div>
+
+      <div class="block">
+        <span class="block-label">Target Companies — Bangalore</span>
+        <div class="cards">
+          <div class="card">
+            <div class="card-title">Tier 1 — Perfect Fit</div>
+            <div class="card-body">Ather Energy · Honeywell Connected Enterprise · Aveva · Bosch Global Software · Tata Elxsi</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Tier 2 — Strong Fit</div>
+            <div class="card-body">SAP Labs · Siemens Digital Industries · Philips Innovation Campus · Rockwell Automation</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Tier 3 — Aspiration</div>
+            <div class="card-body">Microsoft India · Adobe India · Google India</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <span class="block-label">Salary Target</span>
+        <div class="stats">
+          <div class="stat">
+            <span class="stat-num">22L</span>
+            <div class="stat-lbl">Current — significantly undervalued</div>
+          </div>
+          <div class="stat">
+            <span class="stat-num">35–45L</span>
+            <div class="stat-lbl">Immediate target — bridge company</div>
+          </div>
+          <div class="stat">
+            <span class="stat-num">50–80L</span>
+            <div class="stat-lbl">18 month target — senior UX role</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <span class="block-label">This Week's Actions</span>
+        <div class="timeline">
+          <div class="tl-item"><div class="tl-title">Monday</div><div class="tl-body">Update LinkedIn headline. Post the Rizta screenshot observation.</div></div>
+          <div class="tl-item"><div class="tl-title">Tuesday</div><div class="tl-body">Post the cross-domain identity story — 20 years, second innings.</div></div>
+          <div class="tl-item"><div class="tl-title">Wednesday</div><div class="tl-body">Publish Cogni-Focus as a LinkedIn article.</div></div>
+          <div class="tl-item"><div class="tl-title">Thursday</div><div class="tl-body">Send 5 direct messages to 5 design leads at 5 target companies.</div></div>
+          <div class="tl-item"><div class="tl-title">Friday</div><div class="tl-body">Post the interactive resume — attach the HTML file directly.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 07 RESUME & BRANDING -->
+    <div class="panel" id="t6" style="--tc:#BA7517;--tc-bg:rgba(186,117,23,.07);--tc-bd:rgba(186,117,23,.2);">
+      <div class="panel-header">
+        <div class="panel-icon-big">📄</div>
+        <div>
+          <div class="panel-title">Resume & Personal Branding</div>
+          <div class="panel-sub">Three formats, one identity, one interactive experience</div>
+        </div>
+      </div>
+
+      <div class="block">
+        <span class="block-label">Resume Versions Built</span>
+        <div class="cards">
+          <div class="card">
+            <div class="card-title">Full Resume · .docx</div>
+            <div class="card-body">Two-page Word document. For email attachments and ATS portals. Includes full portfolio projects and philosophy quote.</div>
+          </div>
+          <div class="card">
+            <div class="card-title">One-Page Resume · .docx</div>
+            <div class="card-body">Tight single page. For quick physical handover. Clean two-column layout.</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Two-Pane Resume · .docx</div>
+            <div class="card-body">Skills/Education on left. Experience/Portfolio on right. Professional and modern.</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Interactive Resume · .html</div>
+            <div class="card-body">Full dark/light mode toggle. Portfolio matrix with clickable project popups. The resume itself demonstrates your Windows eye strain case study argument.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <span class="block-label">LinkedIn Headline</span>
+        <div class="quote">Human Factors Advocate | 20 yrs Safety-Critical HMI & SCADA Design | Finding what products silently do to people — then fixing it</div>
+      </div>
+
+      <div class="block">
+        <span class="block-label">Positioning Statement</span>
+        <div class="block-body">"I find what products silently do to people — then fix it." This single line goes on every resume footer, every LinkedIn post, every email signature. It is not a job description. It is a philosophy. And it differentiates you from every other UX designer in the room.</div>
+      </div>
+
+      <div class="block">
+        <span class="block-label">Content Strategy</span>
+        <div class="pills">
+          <span class="pill">One LinkedIn post per week</span>
+          <span class="pill">Sharp · specific · evidence-based</span>
+          <span class="pill">No motivational quotes</span>
+          <span class="pill">Tag target companies</span>
+          <span class="pill">Medium articles for depth</span>
+          <span class="pill">Behance for visual proof</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 08 INTERVIEW PREP -->
+    <div class="panel" id="t5" style="--tc:#D44A7A;--tc-bg:rgba(212,74,122,.07);--tc-bd:rgba(212,74,122,.2);">
+      <div class="panel-header">
+        <div class="panel-icon-big">🎯</div>
+        <div>
+          <div class="panel-title">Interview Preparation</div>
+          <div class="panel-sub">7 question categories · Mock interview complete · Answer guide ready</div>
+        </div>
+      </div>
+
+      <div class="block">
+        <span class="block-label">The 7 Question Categories</span>
+        <div class="timeline">
+          <div class="tl-item"><div class="tl-title">Category 1 — Who Are You Really</div><div class="tl-body">Journey narrative, why now, why UX, what 20 years in one company teaches</div></div>
+          <div class="tl-item"><div class="tl-title">Category 2 — Domain Credibility</div><div class="tl-body">High Performance SCADA in 60 seconds, most dangerous HMI mistake, ISA-101</div></div>
+          <div class="tl-item"><div class="tl-title">Category 3 — UX Craft</div><div class="tl-body">Design process, research methods, tools, validating a hypothesis</div></div>
+          <div class="tl-item"><div class="tl-title">Category 4 — Cobra Hood Specific</div><div class="tl-body">IP ownership, manufacturing constraints, what problems does the hood create</div></div>
+          <div class="tl-item"><div class="tl-title">Category 5 — Collaboration & Culture</div><div class="tl-body">Conflict resolution, receiving feedback, working with engineers</div></div>
+          <div class="tl-item"><div class="tl-title">Category 6 — Salary & Commitment</div><div class="tl-body">Expectations, why choose you over degree holders, 3-year vision</div></div>
+          <div class="tl-item"><div class="tl-title">Category 7 — Nobody Prepares For</div><div class="tl-body">Worst design shipped, one thing you'd fix in the industry, what question you hoped they'd ask</div></div>
+        </div>
+      </div>
+
+      <div class="block">
+        <span class="block-label">Mock Interview Result</span>
+        <div class="block-body">A full mock interview with Harish Kumar was completed. Key moments: intellectual honesty when not knowing the answer built more trust than a confident bluff. The showroom personalisation insight emerged naturally in conversation. The rider experience across three bikes — Avenger, cruiser, scooter — revealed depth no portfolio can show.</div>
+      </div>
+
+      <div class="block">
+        <span class="block-label">The Five Rules in the Room</span>
+        <div class="cards">
+          <div class="card"><div class="card-title">Pause before every answer</div><div class="card-body">Two seconds signals thinking not reacting. Confidence not speed.</div></div>
+          <div class="card"><div class="card-title">Finish every sentence</div><div class="card-body">The most powerful moments are the ones most people are afraid to complete.</div></div>
+          <div class="card"><div class="card-title">End answers with a question</div><div class="card-body">Interviews that become conversations become job offers.</div></div>
+          <div class="card"><div class="card-title">Never apologise for the concept</div><div class="card-body">It is a strong proposal. Own it completely.</div></div>
+          <div class="card"><div class="card-title">When you don't know — say so</div><div class="card-body">Then say how you would find out. Honesty builds more credibility than bluffing.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 09 PERSONAL STORY -->
+    <div class="panel" id="t9" style="--tc:#5DCAA5;--tc-bg:rgba(93,202,165,.07);--tc-bd:rgba(93,202,165,.2);">
+      <div class="panel-header">
+        <div class="panel-icon-big">🎨</div>
+        <div>
+          <div class="panel-title">Personal Story</div>
+          <div class="panel-sub">The artist, the SCADA designer, the human factors advocate</div>
+        </div>
+      </div>
+
+      <div class="block">
+        <span class="block-label">The Arc</span>
+        <div class="timeline">
+          <div class="tl-item"><div class="tl-title">The Artist</div><div class="tl-body">Personal art and painting practice. A visual eye calibrated to light, contrast, and composition before any screen was involved.</div></div>
+          <div class="tl-item"><div class="tl-title">2006 — The Canvas Changes</div><div class="tl-body">SCADA mimic design begins. Every control room screen becomes a painting with consequence. Art interest channelled entirely into HMI. The artist never left — the medium changed.</div></div>
+          <div class="tl-item"><div class="tl-title">20 Years — The Lens Develops</div><div class="tl-body">Designing for operators whose lives depend on the interface. Learning to see what products silently do to human beings under stress. High Performance SCADA. Safety-critical stakes.</div></div>
+          <div class="tl-item"><div class="tl-title">The WebApp Project — The Door Opens</div><div class="tl-body">First formal consumer UX project. The vocabulary of UX gives language to 20 years of applied human factors thinking. The transition becomes clear.</div></div>
+          <div class="tl-item"><div class="tl-title">2026 — The Second Innings</div><div class="tl-body">UX certification in progress. Portfolio building. The second innings dedicated entirely to applying safety-critical design thinking to the products that affect millions of people daily.</div></div>
+        </div>
+      </div>
+
+      <div class="block">
+        <span class="block-label">The Three Screens on the Desk</span>
+        <div class="block-body">Left screen: Gmail — the world to reach. Centre screen: live SCADA mimic in progress — 20 years of craft still running. Right screen: Lenovo monitor glowing pink-magenta — the exact Windows default luminance problem described in Case Study 1. The desk photo is the whole story in one frame.</div>
+      </div>
+
+      <div class="block">
+        <span class="block-label">What Steve Jobs Got Right — And What He Missed</span>
+        <div class="quote">"Jobs said customers don't know what they want until you show them. That is product thinking. What I do is different — find what is silently hurting millions of people, name it, solve it, give it back to them as relief they didn't know they needed. That is not product thinking. That is human-centered advocacy at scale."</div>
+      </div>
+
+      <div class="block">
+        <span class="block-label">The Life Philosophy</span>
+        <div class="quote">"I don't serve to deserve something in return. I wish to work on my grounds for a work where everyone deserves the best."</div>
+      </div>
+
+      <div class="block">
+        <span class="block-label">The Desk — Jugaad Engineering</span>
+        <div class="block-body">Three monitors elevated on a Dulux paint bucket for ergonomic height — instinctive problem solving. The same human who noticed that scooter dashboards are at the wrong height raised his own screens closer to eye level with a paint tin. Lived practice and design philosophy are the same thing.</div>
+      </div>
+    </div>
+
+  </div><!-- panel-wrap -->
+</div><!-- layout -->
+
+<script>
+function show(id, el) {
+  // hide all panels
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  // deactivate all tabs
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  // show selected
+  document.getElementById(id).classList.add('active');
+  el.classList.add('active');
+  // scroll panel to top
+  document.querySelector('.panel-wrap').scrollTop = 0;
+}
+</script>
+</body>
+</html>

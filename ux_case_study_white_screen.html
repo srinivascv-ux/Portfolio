@@ -1,0 +1,581 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+
+  .cs-root {
+    font-family: 'DM Sans', sans-serif;
+    color: var(--color-text-primary);
+    background: transparent;
+    max-width: 680px;
+    padding: 0 0 2rem;
+  }
+
+  .cs-hero {
+    background: #2C1810;
+    border-radius: var(--border-radius-lg);
+    padding: 3rem 2.5rem 2.5rem;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cs-hero-glow {
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,200,100,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .cs-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #E8A84A;
+    border: 0.5px solid #E8A84A;
+    border-radius: 20px;
+    padding: 3px 10px;
+    margin-bottom: 1.2rem;
+  }
+
+  .cs-hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 600;
+    line-height: 1.15;
+    color: #F5EDD8;
+    margin: 0 0 1rem;
+  }
+
+  .cs-hero h1 em {
+    font-style: italic;
+    color: #E8A84A;
+  }
+
+  .cs-hero-sub {
+    font-size: 15px;
+    font-weight: 300;
+    color: #A89880;
+    line-height: 1.6;
+    max-width: 520px;
+    margin: 0 0 2rem;
+  }
+
+  .cs-meta {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .cs-meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .cs-meta-label {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #6B5A4A;
+  }
+
+  .cs-meta-value {
+    font-size: 13px;
+    font-weight: 500;
+    color: #D4C4A8;
+  }
+
+  .cs-section {
+    margin-bottom: 2rem;
+  }
+
+  .cs-section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1rem;
+  }
+
+  .cs-section-num {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    color: var(--color-text-secondary);
+    min-width: 28px;
+  }
+
+  .cs-section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0;
+    color: var(--color-text-primary);
+  }
+
+  .cs-divider {
+    height: 0.5px;
+    background: var(--color-border-tertiary);
+    flex: 1;
+  }
+
+  .cs-body {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--color-text-secondary);
+    margin: 0 0 1rem;
+  }
+
+  .cs-highlight {
+    background: #F5F0E8;
+    border-left: 3px solid #C4935A;
+    border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0;
+    padding: 1rem 1.25rem;
+    margin: 1.25rem 0;
+    font-style: italic;
+    font-size: 15px;
+    color: #5A3E28;
+    line-height: 1.7;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .cs-highlight {
+      background: #2A1F14;
+      color: #D4B896;
+    }
+  }
+
+  .cs-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin: 1rem 0;
+  }
+
+  .cs-card {
+    background: var(--color-background-secondary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    padding: 1rem 1.1rem;
+  }
+
+  .cs-card-icon {
+    font-size: 20px;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .cs-card-title {
+    font-size: 13px;
+    font-weight: 500;
+    margin: 0 0 4px;
+    color: var(--color-text-primary);
+  }
+
+  .cs-card-body {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .cs-swatch-row {
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+    margin: 1.25rem 0;
+    flex-wrap: wrap;
+  }
+
+  .cs-swatch {
+    border-radius: var(--border-radius-md);
+    border: 0.5px solid var(--color-border-tertiary);
+    overflow: hidden;
+    width: 100px;
+  }
+
+  .cs-swatch-color {
+    height: 56px;
+    width: 100%;
+  }
+
+  .cs-swatch-info {
+    padding: 6px 8px;
+    background: var(--color-background-primary);
+  }
+
+  .cs-swatch-name {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    margin: 0 0 2px;
+  }
+
+  .cs-swatch-hex {
+    font-size: 10px;
+    font-family: monospace;
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  .cs-swatch-label {
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    margin-bottom: 4px;
+  }
+
+  .cs-contrast-bar {
+    height: 8px;
+    border-radius: 4px;
+    background: var(--color-background-secondary);
+    overflow: hidden;
+    margin: 6px 0 2px;
+  }
+
+  .cs-contrast-fill {
+    height: 100%;
+    border-radius: 4px;
+  }
+
+  .cs-contrast-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--color-text-secondary);
+  }
+
+  .cs-timeline {
+    position: relative;
+    padding-left: 1.5rem;
+    margin: 1rem 0;
+  }
+
+  .cs-timeline::before {
+    content: '';
+    position: absolute;
+    left: 6px; top: 6px; bottom: 6px;
+    width: 0.5px;
+    background: var(--color-border-tertiary);
+  }
+
+  .cs-tl-item {
+    position: relative;
+    margin-bottom: 1.2rem;
+  }
+
+  .cs-tl-dot {
+    position: absolute;
+    left: -1.4rem; top: 5px;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #C4935A;
+    border: 1.5px solid var(--color-background-primary);
+  }
+
+  .cs-tl-year {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: #C4935A;
+    margin: 0 0 2px;
+  }
+
+  .cs-tl-text {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .cs-impact-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--color-border-tertiary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    margin: 1rem 0;
+  }
+
+  .cs-impact-cell {
+    background: var(--color-background-primary);
+    padding: 1rem;
+    text-align: center;
+  }
+
+  .cs-impact-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: #C4935A;
+    display: block;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .cs-impact-desc {
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    line-height: 1.4;
+  }
+
+  .cs-solution-panel {
+    background: var(--color-background-secondary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    padding: 1.25rem;
+    margin: 1rem 0;
+  }
+
+  .cs-solution-panel h3 {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    margin: 0 0 0.75rem;
+  }
+
+  .cs-sol-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    padding: 6px 0;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+    line-height: 1.4;
+  }
+
+  .cs-sol-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .cs-sol-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #C4935A;
+    flex-shrink: 0;
+  }
+</style>
+
+<div class="cs-root">
+
+  <div class="cs-hero">
+    <div class="cs-hero-glow"></div>
+    <div class="cs-tag">UX Case Study</div>
+    <h1>The <em>Blinding</em> Default:<br>White Screens & Visual Fatigue</h1>
+    <p class="cs-hero-sub">How a 50-year-old metaphor borrowed from paper quietly became one of the most pervasive, unaddressed ergonomic failures in the history of computing.</p>
+    <div class="cs-meta">
+      <div class="cs-meta-item">
+        <span class="cs-meta-label">Scope</span>
+        <span class="cs-meta-value">Systemic / Industry</span>
+      </div>
+      <div class="cs-meta-item">
+        <span class="cs-meta-label">Duration</span>
+        <span class="cs-meta-value">20 years lived research</span>
+      </div>
+      <div class="cs-meta-item">
+        <span class="cs-meta-label">Role</span>
+        <span class="cs-meta-value">Researcher & Advocate</span>
+      </div>
+      <div class="cs-meta-item">
+        <span class="cs-meta-label">Domain</span>
+        <span class="cs-meta-value">OS · Productivity · Browser</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="cs-section">
+    <div class="cs-section-header">
+      <span class="cs-section-num">01</span>
+      <h2>The Problem</h2>
+      <div class="cs-divider"></div>
+    </div>
+    <p class="cs-body">Screens are light sources. Paper is a light reflector. These are fundamentally different physical objects — yet for decades, every major operating system, productivity suite, and browser defaulted to white backgrounds modeled directly on printed paper.</p>
+    <div class="cs-highlight">"Nobody designs a room where you stare directly into a lightbulb for eight hours a day. Yet that is precisely what a white-background screen demands of you."</div>
+    <p class="cs-body">The result is Computer Vision Syndrome (CVS): a cluster of eye strain, headaches, and visual fatigue experienced by an estimated 50–90% of regular computer users. The cause isn't screens per se — it's the extreme luminance contrast of black text on <span style="font-family: monospace; font-size: 13px;">#FFFFFF</span>, a contrast ratio of 21:1 that no ergonomics standard would ever recommend for sustained reading.</p>
+  </div>
+
+  <div class="cs-section">
+    <div class="cs-section-header">
+      <span class="cs-section-num">02</span>
+      <h2>Who gets harmed</h2>
+      <div class="cs-divider"></div>
+    </div>
+    <div class="cs-cards">
+      <div class="cs-card">
+        <span class="cs-card-icon">👁</span>
+        <p class="cs-card-title">General users</p>
+        <p class="cs-card-body">Cumulative eye strain after 4–8 hours. Fatigue masked until end of day.</p>
+      </div>
+      <div class="cs-card">
+        <span class="cs-card-icon">🧠</span>
+        <p class="cs-card-title">Migraine sufferers</p>
+        <p class="cs-card-body">White backgrounds are a documented trigger for photosensitive migraines.</p>
+      </div>
+      <div class="cs-card">
+        <span class="cs-card-icon">🔭</span>
+        <p class="cs-card-title">Astigmatism</p>
+        <p class="cs-card-body">~33% of adults. High contrast makes text "bleed" and shimmer.</p>
+      </div>
+      <div class="cs-card">
+        <span class="cs-card-icon">🌙</span>
+        <p class="cs-card-title">Low-light contexts</p>
+        <p class="cs-card-body">Evening or night use with white defaults disrupts circadian rhythm.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="cs-section">
+    <div class="cs-section-header">
+      <span class="cs-section-num">03</span>
+      <h2>Root cause: historical inertia</h2>
+      <div class="cs-divider"></div>
+    </div>
+    <p class="cs-body">The "desktop metaphor" introduced at Xerox PARC in the 1970s made computing legible to a paper-literate public. White canvas + black text made sense as an onboarding convention. Nobody course-corrected once screens became the primary medium — because defaults are political.</p>
+    <div class="cs-timeline">
+      <div class="cs-tl-item">
+        <div class="cs-tl-dot"></div>
+        <p class="cs-tl-year">1970s–80s</p>
+        <p class="cs-tl-text">Xerox PARC introduces desktop metaphor. White canvas borrows from paper to ease adoption.</p>
+      </div>
+      <div class="cs-tl-item">
+        <div class="cs-tl-dot"></div>
+        <p class="cs-tl-year">1990s–2000s</p>
+        <p class="cs-tl-text">Windows, Office, browsers all ship white defaults. Metaphor hardens into convention.</p>
+      </div>
+      <div class="cs-tl-item">
+        <div class="cs-tl-dot"></div>
+        <p class="cs-tl-year">2010s</p>
+        <p class="cs-tl-text">Flat design doubles down on pure white. CVS research accumulates — products ignore it.</p>
+      </div>
+      <div class="cs-tl-item">
+        <div class="cs-tl-dot"></div>
+        <p class="cs-tl-year">2018</p>
+        <p class="cs-tl-text">macOS Mojave ships system-wide dark mode — 40+ years after the GUI was invented.</p>
+      </div>
+      <div class="cs-tl-item">
+        <div class="cs-tl-dot"></div>
+        <p class="cs-tl-year">2025</p>
+        <p class="cs-tl-text">Dark mode widely available yet still an opt-in. Default remains unaddressed.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="cs-section">
+    <div class="cs-section-header">
+      <span class="cs-section-num">04</span>
+      <h2>Scale of impact</h2>
+      <div class="cs-divider"></div>
+    </div>
+    <div class="cs-impact-grid">
+      <div class="cs-impact-cell">
+        <span class="cs-impact-num">50–90%</span>
+        <p class="cs-impact-desc">of knowledge workers experience CVS symptoms</p>
+      </div>
+      <div class="cs-impact-cell">
+        <span class="cs-impact-num">21:1</span>
+        <p class="cs-impact-desc">contrast ratio of black on white — max possible, never ergonomic</p>
+      </div>
+      <div class="cs-impact-cell">
+        <span class="cs-impact-num">~8hrs</span>
+        <p class="cs-impact-desc">average daily screen exposure per working adult</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="cs-section">
+    <div class="cs-section-header">
+      <span class="cs-section-num">05</span>
+      <h2>The proposed solution</h2>
+      <div class="cs-divider"></div>
+    </div>
+    <p class="cs-body">The fix is not dark mode. Dark mode solves the wrong problem — it trades one extreme (blinding white) for another (adapting eyes from ambient to near-black). The answer is a warm, low-luminance default that mirrors aged paper and e-ink — surfaces humans have read comfortably for centuries.</p>
+
+    <div class="cs-swatch-row">
+      <div>
+        <p class="cs-swatch-label">Current default</p>
+        <div class="cs-swatch">
+          <div class="cs-swatch-color" style="background: #FFFFFF; border-bottom: 0.5px solid #E0E0E0;"></div>
+          <div class="cs-swatch-info">
+            <p class="cs-swatch-name">Pure white</p>
+            <p class="cs-swatch-hex">#FFFFFF</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p class="cs-swatch-label">Proposed default</p>
+        <div class="cs-swatch">
+          <div class="cs-swatch-color" style="background: #F5F0E8;"></div>
+          <div class="cs-swatch-info">
+            <p class="cs-swatch-name">Warm off-white</p>
+            <p class="cs-swatch-hex">#F5F0E8</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p class="cs-swatch-label">Long-read variant</p>
+        <div class="cs-swatch">
+          <div class="cs-swatch-color" style="background: #E8E0D0;"></div>
+          <div class="cs-swatch-info">
+            <p class="cs-swatch-name">Aged paper</p>
+            <p class="cs-swatch-hex">#E8E0D0</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cs-contrast-bar" style="margin-top: 1rem;">
+      <div class="cs-contrast-fill" style="width: 100%; background: #D44; border-radius: 4px;"></div>
+    </div>
+    <div class="cs-contrast-label">
+      <span>#000 on #FFF — 21:1 contrast ratio (extreme)</span>
+    </div>
+    <div class="cs-contrast-bar">
+      <div class="cs-contrast-fill" style="width: 48%; background: #4A9; border-radius: 4px;"></div>
+    </div>
+    <div class="cs-contrast-label">
+      <span>#3A2A1A on #F5F0E8 — ~9:1 contrast ratio (WCAG AA+ compliant, comfortable)</span>
+    </div>
+
+    <div class="cs-solution-panel" style="margin-top: 1.25rem;">
+      <h3>Systemic recommendations</h3>
+      <div class="cs-sol-row"><div class="cs-sol-dot"></div><span>Ship warm off-white (<span style="font-family: monospace; font-size: 12px;">#F5F0E8</span>) as the OS-level default canvas color</span></div>
+      <div class="cs-sol-row"><div class="cs-sol-dot"></div><span>Reduce default luminance contrast target from 21:1 to 7:1–10:1 for body text</span></div>
+      <div class="cs-sol-row"><div class="cs-sol-dot"></div><span>Design labs to run 8-hour longitudinal eye strain tests, not 30-minute usability sessions</span></div>
+      <div class="cs-sol-row"><div class="cs-sol-dot"></div><span>Treat the warm default as the canonical mode — make pure white the opt-in</span></div>
+      <div class="cs-sol-row"><div class="cs-sol-dot"></div><span>Embed brightness/warm-mode controls in primary OS accessibility surfaces, not buried settings</span></div>
+    </div>
+  </div>
+
+  <div class="cs-section">
+    <div class="cs-section-header">
+      <span class="cs-section-num">06</span>
+      <h2>Precedents & proof</h2>
+      <div class="cs-divider"></div>
+    </div>
+    <div class="cs-cards">
+      <div class="cs-card">
+        <p class="cs-card-title">Kindle / E-ink</p>
+        <p class="cs-card-body">Warm, low-contrast reflective surface. No reports of e-reader-induced eye strain.</p>
+      </div>
+      <div class="cs-card">
+        <p class="cs-card-title">iA Writer</p>
+        <p class="cs-card-body">Off-white canvas by default. Writers routinely cite reduced fatigue over Word/Docs.</p>
+      </div>
+      <div class="cs-card">
+        <p class="cs-card-title">Instapaper / Readwise</p>
+        <p class="cs-card-body">Sepia reading mode adopted early. Users overwhelmingly prefer it for long reading.</p>
+      </div>
+      <div class="cs-card">
+        <p class="cs-card-title">CVS research</p>
+        <p class="cs-card-body">Peer-reviewed literature directly links high-luminance screens to fatigue and headaches.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
