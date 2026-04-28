@@ -1,2 +1,2 @@
 # Portfolio
-uman Factors &amp; UX Portfolio — Srinivas CV
+Human Factors &amp; UX Portfolio — Srinivas CV
